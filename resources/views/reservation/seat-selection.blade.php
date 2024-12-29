@@ -153,7 +153,7 @@
         </div>
         <div class="text-end col-lg-6 col-md-3">
             <p class="fs-5 fw-bold">Tổng tiền: 234.000 đồng</p>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle"></i>&nbsp;Chọn vé</button>
+            <a href="{{ route('orderticket.index', ['route' => $route->route_id ]) }}" class="btn btn-primary"><i class="bi bi-check2-circle"></i>&nbsp;Chọn vé</a>
         </div>
     </div>
 </div>
