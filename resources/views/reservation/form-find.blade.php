@@ -1,5 +1,5 @@
 <div id="contact" class="contact container">
-    <div class="row stats-row gy-4 mt-3 p-4 contact-form" data-aos="fade-up" data-aos-delay="500">
+    <div class="row stats-row gy-4 mt-3 p-4 contact-form" data-aos="fade-up" data-aos-delay="200">
         <h2>Tìm kiếm vé xe</h2>
         <form action="{{ route('reservation.findRoute') }}" method="get" class="" id="booking">
             <div class="row">

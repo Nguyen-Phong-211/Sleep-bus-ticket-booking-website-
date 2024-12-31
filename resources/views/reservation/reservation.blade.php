@@ -37,7 +37,7 @@
 
                     @include('reservation.filter')
 
-                    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="500">
+                    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
 
                         @if ($routes->isEmpty() || session('end_seats'))
                             <div class="row gy-4">
@@ -82,8 +82,8 @@
                                                         <div class="d-flex align-items-center mb-3 mt-3">
                                                             <div class="d-flex flex-column align-items-center me-3">
                                                                 <h4 class="mb-1">{{ $route->departure_time }}</h4>
-                                                                <span class="text-muted text-truncate" data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top"
+                                                                <span class="text-muted text-truncate"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
                                                                     title="{{ $route->d_detail_address }}"
                                                                     style="max-width: 200px;">{{ $route->d_detail_address }}</span>
                                                             </div>
@@ -106,8 +106,8 @@
                                                             <i class="bi bi-geo-alt icon-primary"></i>
                                                             <div class="d-flex flex-column align-items-center ms-3">
                                                                 <h4 class="mb-1">{{ $route->arrival_time }}</h4>
-                                                                <span class="text-muted text-truncate" data-bs-toggle="tooltip"
-                                                                    data-bs-placement="top"
+                                                                <span class="text-muted text-truncate"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
                                                                     title="{{ $route->a_detail_address }}"
                                                                     style="max-width: 200px;">{{ $route->a_detail_address }}</span>
                                                             </div>
@@ -134,32 +134,53 @@
                                                                 </span>
                                                             </div>
                                                             <div class="card-text">
-                                                                Còn: 
+                                                                Còn:
                                                                 @php
                                                                     $status_seat = null;
-                                                                    $badge_class = 'bg-danger'; 
-                                                                    $status_text = 'Hết vé'; 
-                                                            
+                                                                    $badge_class = 'bg-danger';
+                                                                    $status_text = 'Hết vé';
+
                                                                     if ($route->type_vehicle_id == 1) {
-                                                                        $status_seat = $status_seat_limousine->status_seat ?? 0;
-                                                                        $badge_class = $status_seat > 0 ? 'bg-success' : 'bg-danger';
-                                                                        $status_text = $status_seat > 0 ? "{$status_seat} chỗ trống" : 'Hết vé';
+                                                                        $status_seat =
+                                                                            $status_seat_limousine->status_seat ?? 0;
+                                                                        $badge_class =
+                                                                            $status_seat > 0
+                                                                                ? 'bg-success'
+                                                                                : 'bg-danger';
+                                                                        $status_text =
+                                                                            $status_seat > 0
+                                                                                ? "{$status_seat} chỗ trống"
+                                                                                : 'Hết vé';
                                                                     } elseif ($route->type_vehicle_id == 2) {
-                                                                        $status_seat = $status_seat_sleepbus->status_seat ?? 0;
-                                                                        $badge_class = $status_seat > 0 ? 'bg-success' : 'bg-danger';
-                                                                        $status_text = $status_seat > 0 ? "{$status_seat} chỗ trống" : 'Hết vé';
+                                                                        $status_seat =
+                                                                            $status_seat_sleepbus->status_seat ?? 0;
+                                                                        $badge_class =
+                                                                            $status_seat > 0
+                                                                                ? 'bg-success'
+                                                                                : 'bg-danger';
+                                                                        $status_text =
+                                                                            $status_seat > 0
+                                                                                ? "{$status_seat} chỗ trống"
+                                                                                : 'Hết vé';
                                                                     } elseif ($route->type_vehicle_id == 3) {
-                                                                        $status_seat = $status_seat_coach->status_seat ?? 0;
-                                                                        $badge_class = $status_seat > 0 ? 'bg-success' : 'bg-danger';
-                                                                        $status_text = $status_seat > 0 ? "{$status_seat} chỗ trống" : 'Hết vé';
+                                                                        $status_seat =
+                                                                            $status_seat_coach->status_seat ?? 0;
+                                                                        $badge_class =
+                                                                            $status_seat > 0
+                                                                                ? 'bg-success'
+                                                                                : 'bg-danger';
+                                                                        $status_text =
+                                                                            $status_seat > 0
+                                                                                ? "{$status_seat} chỗ trống"
+                                                                                : 'Hết vé';
                                                                     }
                                                                 @endphp
-                                                            
+
                                                                 <span class="badge rounded-pill {{ $badge_class }}">
                                                                     {{ $status_text }}
                                                                 </span>
                                                             </div>
-                                                            
+
                                                             <div class="card-text">
                                                                 Giá: <span class="fs-5 text-warning font-monospace">
                                                                     {{ number_format($route->price) }}
@@ -168,61 +189,73 @@
                                                         </div>
                                                     </div>
                                                     @if ($status_text == 'Hết vé')
-                                                        
                                                     @else
                                                         <hr>
-                                                        <div class="d-flex justify-content-evenly align-items-center mb-3 mt-3">
-                                                            <a href="{{ route('orderticket.index', ['route' => $route->route_id]) }}" 
+                                                        <div
+                                                            class="d-flex justify-content-evenly align-items-center mb-3 mt-3">
+                                                            <a href="{{ route('orderticket.index', ['route' => $route->route_id]) }}"
                                                                 class="btn btn-primary w-auto border-0 text-uppercase rounded-5 p-3">
                                                                 <i class="bi bi-bookmark-check"></i>&nbsp; Chọn tuyến
                                                             </a>
-                                                    
-                                                            <ul class="nav nav-pills mb-0 ms-4" id="pills-tab" role="tablist">
+
+                                                            <ul class="nav nav-pills mb-0 ms-4" id="pills-tab"
+                                                                role="tablist">
                                                                 <li class="nav-item active" role="presentation">
                                                                     <button class="nav-link" id="pills-home-tab"
-                                                                            data-bs-toggle="pill" data-bs-target="#pills-home{{ $route->route_id }}"
-                                                                            type="button" role="tab" aria-controls="pills-home{{ $route->route_id }}"
-                                                                            aria-selected="true">Chọn ghế</button>
+                                                                        data-bs-toggle="pill"
+                                                                        data-bs-target="#pills-home{{ $route->route_id }}"
+                                                                        type="button" role="tab"
+                                                                        aria-controls="pills-home{{ $route->route_id }}"
+                                                                        aria-selected="true">Chọn ghế</button>
                                                                 </li>
                                                                 <li class="nav-item ms-3" role="presentation">
                                                                     <button class="nav-link" id="pills-profile-tab"
-                                                                            data-bs-toggle="pill" data-bs-target="#pills-profile{{ $route->route_id }}"
-                                                                            type="button" role="tab" aria-controls="pills-profile{{ $route->route_id }}"
-                                                                            aria-selected="false">Lịch trình</button>
+                                                                        data-bs-toggle="pill"
+                                                                        data-bs-target="#pills-profile{{ $route->route_id }}"
+                                                                        type="button" role="tab"
+                                                                        aria-controls="pills-profile{{ $route->route_id }}"
+                                                                        aria-selected="false">Lịch trình</button>
                                                                 </li>
                                                                 <li class="nav-item ms-3" role="presentation">
                                                                     <button class="nav-link" id="pills-contact-tab"
-                                                                            data-bs-toggle="pill" data-bs-target="#pills-contact{{ $route->route_id }}"
-                                                                            type="button" role="tab" aria-controls="pills-contact{{ $route->route_id }}"
-                                                                            aria-selected="false">Trung chuyển</button>
+                                                                        data-bs-toggle="pill"
+                                                                        data-bs-target="#pills-contact{{ $route->route_id }}"
+                                                                        type="button" role="tab"
+                                                                        aria-controls="pills-contact{{ $route->route_id }}"
+                                                                        aria-selected="false">Trung chuyển</button>
                                                                 </li>
                                                                 <li class="nav-item ms-3" role="presentation">
                                                                     <button class="nav-link" id="pills-polocy-tab"
-                                                                            data-bs-toggle="pill" data-bs-target="#pills-polocy{{ $route->route_id }}"
-                                                                            type="button" role="tab" aria-controls="pills-polocy{{ $route->route_id }}"
-                                                                            aria-selected="false">Chính sách</button>
+                                                                        data-bs-toggle="pill"
+                                                                        data-bs-target="#pills-polocy{{ $route->route_id }}"
+                                                                        type="button" role="tab"
+                                                                        aria-controls="pills-polocy{{ $route->route_id }}"
+                                                                        aria-selected="false">Chính sách</button>
                                                                 </li>
                                                             </ul>
                                                         </div>
-                                                    @endif            
+                                                    @endif
 
                                                     <div class="tab-content" id="pills-tabContent">
-                                                        <div class="tab-pane fade" id="pills-home{{ $route->route_id }}"
-                                                            role="tabpanel" aria-labelledby="pills-home-tab">
+                                                        <div class="tab-pane fade"
+                                                            id="pills-home{{ $route->route_id }}" role="tabpanel"
+                                                            aria-labelledby="pills-home-tab">
                                                             <hr>
 
                                                             @include('reservation.seat-selection')
 
                                                         </div>
-                                                        <div class="tab-pane fade" id="pills-profile{{ $route->route_id }}"
-                                                            role="tabpanel" aria-labelledby="pills-profile-tab">
+                                                        <div class="tab-pane fade"
+                                                            id="pills-profile{{ $route->route_id }}" role="tabpanel"
+                                                            aria-labelledby="pills-profile-tab">
                                                             <hr>
 
                                                             @include('reservation.ininerary')
 
                                                         </div>
-                                                        <div class="tab-pane fade" id="pills-contact{{ $route->route_id }}"
-                                                            role="tabpanel" aria-labelledby="pills-contact-tab">
+                                                        <div class="tab-pane fade"
+                                                            id="pills-contact{{ $route->route_id }}" role="tabpanel"
+                                                            aria-labelledby="pills-contact-tab">
                                                             <hr>
 
                                                             Đón/ trả tận nơi:
@@ -241,8 +274,9 @@
                                                                     mùi, đồ chảy nước trên xe.</li>
                                                             </ul>
                                                         </div>
-                                                        <div class="tab-pane fade" id="pills-polocy{{ $route->route_id }}"
-                                                            role="tabpanel" aria-labelledby="pills-polocy-tab">
+                                                        <div class="tab-pane fade"
+                                                            id="pills-polocy{{ $route->route_id }}" role="tabpanel"
+                                                            aria-labelledby="pills-polocy-tab">
                                                             <hr>
                                                             <p>Quý khách vui lòng liên hệ để huỷ chuyến xe trước 2 tiếng
                                                                 (nếu có thay đổi)

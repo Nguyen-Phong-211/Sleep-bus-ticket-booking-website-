@@ -45,7 +45,7 @@ Route::prefix('clause')->group(function () {
 //schedule
 Route::prefix('schedule')->group(function () {
     Route::get('/', [ScheduleController::class, 'index'])->name('schedule.index'); 
-    Route::get('/', [ScheduleController::class, 'getAllDeparArriRoute'])->name('schedule.index'); 
+    Route::post('/findroute', [ScheduleController::class, 'getRoutes'])->name('schedule.getRoutes'); 
 });
 
 //consultation
@@ -70,6 +70,8 @@ Route::prefix('authu')->group(function () {
 Route::prefix('reservation')->group(function () {
     Route::get('/', [ReservationController::class, 'index'])->name('reservation.index');
     Route::get('/findroute', [ReservationController::class, 'findRoute'])->name('reservation.findRoute');
+    Route::get('/findprice', [ReservationController::class, 'findRouteByPrice'])->name('reservation.findRouteByPrice');
+    Route::get('/filter', [ReservationController::class, 'filterRoutes'])->name('reservation.filterRoutes');
 });
 
 //rental-contract

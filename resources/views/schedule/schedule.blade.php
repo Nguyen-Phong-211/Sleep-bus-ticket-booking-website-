@@ -30,110 +30,109 @@
                         <div class="contact-form" data-aos="fade-up" data-aos-delay="300">
                             <h3>TÌM LỊCH TRÌNH</h3>
 
-                            <form action="" method="get" class="mt-4" data-aos="fade-up" data-aos-delay="200">
-                                <div class="col-lg-12 col-md-12 d-flex justify-content-between">
-                                    <div class="d-flex flex-column flex-md-row w-100">
-
-                                        <div class="flex-fill col-md-5">
-                                            <label class="form-label">Điểm đi</label>
-                                            <select name="address-from" id="address-from" class="form-control">
-                                                <option value="">Chọn điểm đi</option>
-                                                @foreach ($departurePoints as $departurePoint)
+                            <form action="{{ route('schedule.getRoutes') }}" method="post" class="mt-4" data-aos="fade-up" data-aos-delay="200">
+                                @csrf
+                                <div class="row align-items-center g-3">
+                                    <div class="col-12 col-md-4">
+                                        <label class="form-label">Điểm đi</label>
+                                        <select name="address_from" id="address-from" class="form-control">
+                                            <option value="">Chọn điểm đi</option>
+                                            @foreach ($departurePoints as $departurePoint)
+                                                @if (isset($departureId) && $departureId == $departurePoint['departurepoint_id'])
+                                                    <option value="{{ $departurePoint['departurepoint_id'] }}" selected
+                                                        data-arrivalpoints="{{ json_encode($departurePoint['arrivalpoints']) }}">
+                                                        {{ $departurePoint['departurepoint_name'] }}
+                                                    </option>
+                                                @else
                                                     <option value="{{ $departurePoint['departurepoint_id'] }}"
                                                         data-arrivalpoints="{{ json_encode($departurePoint['arrivalpoints']) }}">
-                                                        {{ $departurePoint['departurepoint_name'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                        {{ $departurePoint['departurepoint_name'] }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                        <div
-                                            class="d-flex align-items-center justify-content-center mx-3 mt-lg-4 mt-md-0">
-                                            <i class="fa-solid fa-arrows-left-right"></i>
-                                        </div>
+                                    <div class="col-auto d-flex justify-content-center">
+                                        <i class="fa-solid fa-arrows-left-right"></i>
+                                    </div>
 
-                                        <div class="flex-fill col-md-5">
-                                            <label class="form-label">Điểm đến</label>
-                                            <select name="address-to" id="address-to" class="form-control">
-                                                <option value="">Chọn điểm đến</option>
-                                                @foreach ($arrivalPoints as $arrivalPoint)
-                                                    <option value="{{ $arrivalPoint['arrivalpoint_id'] }}">
-                                                        {{ $arrivalPoint['arrivalpoint_name'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <div class="col-12 col-md-4">
+                                        <label class="form-label">Điểm đến</label>
+                                        <select name="address_to" id="address-to" class="form-control">
+                                            <option value="">Chọn điểm đến</option>
+                                            @foreach ($arrivalPoints as $arrivalPoint)
+                                                @if (isset($arrivalId) && $arrivalId == $arrivalPoint['arrivalpoint_id'])
+                                                    <option value="{{ $arrivalPoint['arrivalpoint_id'] }}" selected>{{ $arrivalPoint['arrivalpoint_name'] }}</option>
+                                                @else
+                                                    <option value="{{ $arrivalPoint['arrivalpoint_id'] }}">{{ $arrivalPoint['arrivalpoint_name'] }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                        <script>
-                                            $(document).ready(function() {
-                                                $('#address-from').change(function() {
-                                                    var selectedDepartureId = $(this).val();
-                                                    var arrivalPointsSelect = $('#address-to');
-
-                                                    arrivalPointsSelect.empty();
-                                                    arrivalPointsSelect.append('<option value="">Chọn điểm đến</option>');
-
-                                                    // Kiểm tra nếu có điểm đi được chọn
-                                                    if (selectedDepartureId) {
-                                                        var arrivalPoints = $('#address-from option:selected').data('arrivalpoints');
-
-                                                        // Hiển thị các điểm đến tương ứng
-                                                        $.each(arrivalPoints, function(index, arrivalPoint) {
-                                                            arrivalPointsSelect.append(
-                                                                $('<option>', {
-                                                                    value: arrivalPoint.arrivalpoint_id,
-                                                                    text: arrivalPoint.arrivalpoint_name
-                                                                })
-                                                            );
-                                                        });
-                                                    }
-                                                });
-                                                // Nếu điểm đến đã được chọn trước, ẩn danh sách điểm đi
-                                                $('#address-to').change(function() {
-                                                    var selectedArrivalId = $(this).val();
-                                                    if (selectedArrivalId) {
-                                                        $('#address-from').prop('disabled', true); 
-                                                    } else {
-                                                        $('#address-from').prop('disabled', false); 
-                                                    }
-                                                });
-                                            });
-                                        </script>
-
+                                    <div class="col-12" style="width: auto">
+                                        <label class="form-label mt-2"></label>
+                                        <button type="submit" class="btn btn-custom w-100">
+                                            <i class="fa-solid fa-magnifying-glass"></i>&nbsp; Tìm tuyến đường
+                                        </button>
                                     </div>
                                 </div>
-                            </form>
+                            </form>                            
+                            
+                            <script src="{{ asset('assets/js/home.js') }}"></script>
 
                             <div class="col-lg-12 mt-5">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Tuyến xe</th>
-                                            <th scope="col">Loại xe</th>
-                                            <th scope="col">Quảng đường</th>
-                                            <th scope="col">Thời gian ước tính</th>
-                                            <th scope="col">Giá vé</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($getRoute as $route)
+                                @if ($getRoute->isEmpty())
+                                    <div class="container text-center no-result-container">
+                                        <img src="{{ asset('assets/img/general/no-result.png') }}"
+                                            alt="No Result" class="no-result-image img-fluid">
+                                        <h1 class="display-4">Không có kết quả</h1>
+                                        <p class="lead">Xin lỗi, không tìm thấy thông tin bạn cần.</p>
+                                        <a href="{{ route('home.index') }}"
+                                            class="btn btn-primary btn-custom border-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25"
+                                                height="25" fill="currentColor" class="bi bi-house"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z" />
+                                            </svg>
+                                            &nbsp; Quay lại trang chủ
+                                        </a>
+                                    </div>
+                                @else
+                                    <table class="table table-borderless">
+                                        <thead>
                                             <tr>
-                                                <td class="align-middle">{{ $route->departurepoint_name }} -
-                                                    {{ $route->arrivalpoint_name }}</td>
-                                                <td class="align-middle">{{ $route->type_vehicle_name }}</td>
-                                                <td class="align-middle">{{ $route->total_km }} Km</td>
-                                                <td class="align-middle">{{ $route->total_time }} giờ</td>
-                                                <td class="align-middle">{{ number_format($route->price) }} VNĐ</td>
-                                                <td class="align-middle">
-                                                    <a href="{{ route('reservation.index', ['route_schedule' => $route->route_id]) }}"
-                                                        class="border-0 badge rounded-pill bg-primary p-3 text-white">
-                                                        <i class="fa-solid fa-magnifying-glass"></i>&nbsp;
-                                                        Tìm chuyến xe
-                                                    </a>
-                                                </td>
+                                                <th scope="col">Tuyến xe</th>
+                                                <th scope="col">Loại xe</th>
+                                                <th scope="col">Quảng đường</th>
+                                                <th scope="col">Thời gian ước tính</th>
+                                                <th scope="col">Giá vé</th>
+                                                <th scope="col"></th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody id="route-table-body">
+                                            @foreach ($getRoute as $route)
+                                                <tr>
+                                                    <td class="align-middle">{{ $route->departurepoint_name }} -
+                                                        {{ $route->arrivalpoint_name }}</td>
+                                                    <td class="align-middle">{{ $route->type_vehicle_name }}</td>
+                                                    <td class="align-middle">{{ $route->total_km }} Km</td>
+                                                    <td class="align-middle">{{ $route->total_time }} giờ</td>
+                                                    <td class="align-middle">{{ number_format($route->price) }} VNĐ</td>
+                                                    <td class="align-middle">
+                                                        <a href="{{ route('reservation.index', ['route_schedule' => $route->route_id]) }}"
+                                                            class="border-0 badge rounded-pill bg-primary p-3 text-white">
+                                                            <i class="fa-solid fa-magnifying-glass"></i>&nbsp;
+                                                            Tìm chuyến xe
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -152,16 +151,7 @@
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script src="assets/vendor/aos/aos.js"></script>
-    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-
-    <!-- Main JS File -->
-    <script src="assets/js/main.js"></script>
+    @include('cnd-js')
 
 </body>
 
