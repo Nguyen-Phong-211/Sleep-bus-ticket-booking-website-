@@ -39,12 +39,15 @@
                                             <select name="address-from" id="address-from" class="form-control">
                                                 <option value="">Chọn điểm đi</option>
                                                 @foreach ($departurePoints as $departurePoint)
-                                                    <option value="{{ $departurePoint['departurepoint_id'] }}">{{ $departurePoint['departurepoint_name'] }}</option>
+                                                    <option value="{{ $departurePoint['departurepoint_id'] }}"
+                                                        data-arrivalpoints="{{ json_encode($departurePoint['arrivalpoints']) }}">
+                                                        {{ $departurePoint['departurepoint_name'] }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
-                                        <div class="d-flex align-items-center justify-content-center mx-3 mt-lg-4 mt-md-0">
+                                        <div
+                                            class="d-flex align-items-center justify-content-center mx-3 mt-lg-4 mt-md-0">
                                             <i class="fa-solid fa-arrows-left-right"></i>
                                         </div>
 
@@ -53,10 +56,47 @@
                                             <select name="address-to" id="address-to" class="form-control">
                                                 <option value="">Chọn điểm đến</option>
                                                 @foreach ($arrivalPoints as $arrivalPoint)
-                                                    <option value="{{ $arrivalPoint['arrivalpoint_id'] }}">{{ $arrivalPoint['arrivalpoint_name'] }}</option>
+                                                    <option value="{{ $arrivalPoint['arrivalpoint_id'] }}">
+                                                        {{ $arrivalPoint['arrivalpoint_name'] }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
+
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('#address-from').change(function() {
+                                                    var selectedDepartureId = $(this).val();
+                                                    var arrivalPointsSelect = $('#address-to');
+
+                                                    arrivalPointsSelect.empty();
+                                                    arrivalPointsSelect.append('<option value="">Chọn điểm đến</option>');
+
+                                                    // Kiểm tra nếu có điểm đi được chọn
+                                                    if (selectedDepartureId) {
+                                                        var arrivalPoints = $('#address-from option:selected').data('arrivalpoints');
+
+                                                        // Hiển thị các điểm đến tương ứng
+                                                        $.each(arrivalPoints, function(index, arrivalPoint) {
+                                                            arrivalPointsSelect.append(
+                                                                $('<option>', {
+                                                                    value: arrivalPoint.arrivalpoint_id,
+                                                                    text: arrivalPoint.arrivalpoint_name
+                                                                })
+                                                            );
+                                                        });
+                                                    }
+                                                });
+                                                // Nếu điểm đến đã được chọn trước, ẩn danh sách điểm đi
+                                                $('#address-to').change(function() {
+                                                    var selectedArrivalId = $(this).val();
+                                                    if (selectedArrivalId) {
+                                                        $('#address-from').prop('disabled', true); 
+                                                    } else {
+                                                        $('#address-from').prop('disabled', false); 
+                                                    }
+                                                });
+                                            });
+                                        </script>
 
                                     </div>
                                 </div>
@@ -77,7 +117,8 @@
                                     <tbody>
                                         @foreach ($getRoute as $route)
                                             <tr>
-                                                <td class="align-middle">{{ $route->departurepoint_name }} - {{ $route->arrivalpoint_name }}</td>
+                                                <td class="align-middle">{{ $route->departurepoint_name }} -
+                                                    {{ $route->arrivalpoint_name }}</td>
                                                 <td class="align-middle">{{ $route->type_vehicle_name }}</td>
                                                 <td class="align-middle">{{ $route->total_km }} Km</td>
                                                 <td class="align-middle">{{ $route->total_time }} giờ</td>

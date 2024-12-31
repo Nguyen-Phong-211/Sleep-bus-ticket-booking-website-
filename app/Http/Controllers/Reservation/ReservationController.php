@@ -4,10 +4,6 @@ namespace App\Http\Controllers\Reservation;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\TypeVehicle;
-use App\Models\TypeTime;
-use App\Models\Floor;
-use App\Models\RowSeat;
 use Illuminate\Support\Facades\DB;
 
 
@@ -16,16 +12,10 @@ class ReservationController extends Controller
     //index
     public function index()
     {
-        $typeVehicles = TypeVehicle::all();
-        $typeTimes = TypeTime::all();
-        $floors = Floor::all();
-        $rowSeats = RowSeat::all();
+        $routeScheduleId = request('route_schedule');
 
-        $routeScheduleId = request('route_schedule'); 
-
-        if($routeScheduleId)
-        {
-            $routes = DB::table('routes as r')
+        // Cấu trúc chung của query lấy dữ liệu routes
+        $routesQuery = DB::table('routes as r')
             ->join('departurepoints as d', 'r.departurepoint_id', '=', 'd.departurepoint_id')
             ->join('arrivalpoints as a', 'r.arrivalpoint_id', '=', 'a.arrivalpoint_id')
             ->join('route_details as rd', 'rd.route_id', '=', 'r.route_id')
@@ -50,36 +40,70 @@ class ReservationController extends Controller
                 'tv.type_vehicle_name',
                 'rst.row_seat_name',
                 'f.floor_name'
-            )
-            ->when($routeScheduleId, function($query, $routeScheduleId) {
-                return $query->where('rs.route_schedule_id', $routeScheduleId);
+            );
+
+        if ($routeScheduleId) {
+            $routesQuery->where('rs.route_schedule_id', $routeScheduleId);
+        }
+
+        $routes = $routesQuery->get();
+
+        $getSeatStatus = function ($typeVehicleId, $status) {
+            return DB::table('routes as r')
+                ->join('type_vehicles as tv', 'r.type_vehicle_id', '=', 'tv.type_vehicle_id')
+                ->join('seats as s', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
+                ->where('s.status', '=', $status)
+                ->where('s.type_vehicle_id', '=', $typeVehicleId)
+                ->select(DB::raw('COUNT(s.status) as status_seat'))
+                ->first();
+        };
+
+        $status_seat_limousine = $getSeatStatus(1, 0);  
+        $status_seat_sleepbus = $getSeatStatus(2, 0);  
+        $status_seat_coach = $getSeatStatus(3, 0);   
+
+        return view('reservation.reservation', compact('routes', 'status_seat_limousine', 'status_seat_sleepbus', 'status_seat_coach'));
+    }
+
+
+    public function findRoute(Request $request)
+    {
+        // get datas from request
+        $arrivalPointId = $request->input('address_to');
+        $departurePointId = $request->input('address_from');
+        $departureDate = $request->input('date_start');
+        $direct = $request->input('direct');
+        $ticket = $request->input('number_ticket');
+
+        // query
+        $routes = DB::table('routes as r')
+            ->join('departurepoints as d', 'r.departurepoint_id', '=', 'd.departurepoint_id')
+            ->join('arrivalpoints as a', 'r.arrivalpoint_id', '=', 'a.arrivalpoint_id')
+            ->join('route_details as rd', 'rd.route_id', '=', 'r.route_id')
+            ->join('route_schedules as rs', 'rs.route_id', '=', 'r.route_id')
+            ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 'r.type_vehicle_id')
+            ->join('row_seats as rst', 'rst.row_seat_id', '=', 'r.row_seat_id')
+            ->join('floors as f', 'f.floor_id', '=', 'r.floor_id')
+
+            ->where(function ($query) use ($direct) {
+                $query->where('r.one_way', '=', $direct)
+                    ->orWhere('r.round_trip', '=', 0);
             })
-            ->get();
-
-            return view('reservation.reservation', compact('typeVehicles', 'typeTimes', 'floors', 'rowSeats', 'routes'));
-        }
-        else
-        {
-            $routes = DB::table('routes as r')
-            ->join('departurepoints as d', 'r.departurepoint_id', '=', 'd.departurepoint_id')
-            ->join('arrivalpoints as a', 'r.arrivalpoint_id', '=', 'a.arrivalpoint_id')
-            ->join('route_details as rd', 'rd.route_id', '=', 'r.route_id')
-            ->join('route_schedules as rs', 'rs.route_id', '=', 'r.route_id')
-            ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 'r.type_vehicle_id')
-            ->join('row_seats as rst', 'rst.row_seat_id', '=', 'r.row_seat_id')
-            ->join('floors as f', 'f.floor_id', '=', 'r.floor_id')
+            ->where(function ($query) use ($direct) {
+                $query->where('r.one_way', '=', 0)
+                    ->orWhere('r.round_trip', '=', $direct);
+            })
+            ->where('r.departurepoint_id', '=', $departurePointId)
+            ->where('r.arrivalpoint_id', '=', $arrivalPointId)
+            ->where('rs.departure_date', '=', $departureDate)
             ->select(
                 'r.*',
                 'd.departurepoint_id',
                 'd.departurepoint_name',
                 'd.detail_address as d_detail_address',
-                'd.one_way as d_one_way',
-                'd.transshipment as d_transshipment',
                 'a.arrivalpoint_id',
                 'a.arrivalpoint_name',
                 'a.detail_address as a_detail_address',
-                'a.one_way as a_one_way',
-                'a.transshipment as a_transshipment',
                 'rd.*',
                 'rs.*',
                 'tv.type_vehicle_name',
@@ -88,7 +112,58 @@ class ReservationController extends Controller
             )
             ->get();
 
-            return view('reservation.reservation', compact('typeVehicles', 'typeTimes', 'floors', 'rowSeats', 'routes'));
+
+        function getStatusSeat($typeVehicleId)
+        {
+            return DB::table('routes as r')
+                ->join('type_vehicles as tv', 'r.type_vehicle_id', '=', 'tv.type_vehicle_id')
+                ->join('seats as s', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
+                ->where('s.status', '=', 0)
+                ->where('s.type_vehicle_id', '=', $typeVehicleId)
+                ->select(DB::raw('COUNT(s.status) as status_seat'))
+                ->first();
         }
+
+        $status_seat_limousine = getStatusSeat(1);
+        $status_seat_sleepbus = getStatusSeat(2);
+        $status_seat_coach = getStatusSeat(3);
+
+        $status_seats = [
+            'limousine' => $status_seat_limousine,
+            'sleepbus' => $status_seat_sleepbus,
+            'coach' => $status_seat_coach,
+        ];
+
+        foreach ($status_seats as $key => $status_seat) {
+            if ($ticket <= $status_seat->status_seat) {
+                return view('reservation.reservation', [
+                    'routes' => $routes,
+                    'direct' => $direct,
+                    'departurePointId' => $departurePointId,
+                    'arrivalPointId' => $arrivalPointId,
+                    'departureDate' => $departureDate,
+                    'ticket' => $ticket,
+                    'status_seats' => $status_seats,
+                    'status_seat_limousine' => $status_seat_limousine,
+                    'status_seat_sleepbus' => $status_seat_sleepbus,
+                    'status_seat_coach' => $status_seat_coach,
+                ]);
+            }
+        }
+
+        session()->flash('end_seats', 'Không đủ số ghế trống');
+        // return redirect()->route('reservation.index'); 
+        return view('reservation.reservation', [
+            'routes' => $routes,
+            'direct' => $direct,
+            'departurePointId' => $departurePointId,
+            'arrivalPointId' => $arrivalPointId,
+            'departureDate' => $departureDate,
+            'ticket' => $ticket,
+            'status_seats' => $status_seats,
+            'status_seat_limousine' => $status_seat_limousine,
+            'status_seat_sleepbus' => $status_seat_sleepbus,
+            'status_seat_coach' => $status_seat_coach,
+        ]);
     }
 }

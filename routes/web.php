@@ -69,6 +69,7 @@ Route::prefix('authu')->group(function () {
 //reservation
 Route::prefix('reservation')->group(function () {
     Route::get('/', [ReservationController::class, 'index'])->name('reservation.index');
+    Route::get('/findroute', [ReservationController::class, 'findRoute'])->name('reservation.findRoute');
 });
 
 //rental-contract

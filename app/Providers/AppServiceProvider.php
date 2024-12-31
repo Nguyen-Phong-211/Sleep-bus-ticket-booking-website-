@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Arrivalpoint;
 use App\Models\Departurepoint;
+use App\Models\TypeTime;
+use App\Models\TypeVehicle;
+use App\Models\Floor;
+use App\Models\RowSeat;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,10 +29,15 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer('*', function ($view) {
             $arrivalPoints = Arrivalpoint::all()->toArray();
-            $departurePoints = Departurepoint::all()->toArray();
+            $departurePoints = Departurepoint::with('arrivalPoints')->get();
+            $typeVehicles = TypeVehicle::all();
             $view->with([
                 'arrivalPoints' => $arrivalPoints,
-                'departurePoints' => $departurePoints
+                'departurePoints' => $departurePoints,
+                'typeVehicles' => $typeVehicles,
+                'typeTimes' => TypeTime::all(),
+                'floors' => Floor::all(),
+                'rowSeats' => RowSeat::all(),
             ]);
         });
     }

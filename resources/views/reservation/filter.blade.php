@@ -7,15 +7,17 @@
                 <label for="price-range" class="form-label">Giá vé</label> <br>
                 <div class="input-group">
                     <input type="text" id="price-range" name="price-range" class="form-control"
-                        placeholder="Nhập khoảng giá" aria-describedby="basic-addon2">
+                        placeholder="Nhập giá vé" aria-describedby="basic-addon2">
                     <button type="submit" class="btn btn-primary input-group-text border-0" id="basic-addon2">Áp
                         dụng</button>
                 </div>
             </div>
         </form>
+        <script src="{{ asset('assets/js/home.js') }}"></script>
         <div class="mb-3 mt-3">
             <label for="date-range" class="form-label">Ngày đi</label>
-            <input type="date" id="date-range" name="date-range" class="form-control">
+            {{-- <input type="date" id="date-range" name="date-range" class="form-control"> --}}
+            <input type="date" class="form-control" name="date-start" id="date-start">
         </div>
         <div class="mb-3">
             <label for="vehicle-type" class="form-label">Loại xe</label>

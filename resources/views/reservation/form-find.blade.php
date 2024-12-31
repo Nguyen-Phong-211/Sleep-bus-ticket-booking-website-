@@ -1,22 +1,41 @@
 <div id="contact" class="contact container">
     <div class="row stats-row gy-4 mt-3 p-4 contact-form" data-aos="fade-up" data-aos-delay="500">
         <h2>Tìm kiếm vé xe</h2>
-        <form action="" method="post" class="" id="booking">
+        <form action="{{ route('reservation.findRoute') }}" method="get" class="" id="booking">
             <div class="row">
-                <div class="col-lg-6 col-md-12 d-flex">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="direct" checked>
-                        <label class="form-check-label">
-                            Một chiều
-                        </label>
+
+                @if (isset($direct) && $direct == 1)
+                    <div class="col-lg-6 col-md-12 d-flex">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="direct" value="0">
+                            <label class="form-check-label">
+                                Một chiều
+                            </label>
+                        </div>
+                        <div class="form-check ms-4">
+                            <input class="form-check-input" type="radio" name="direct" value="1" checked>
+                            <label class="form-check-label">
+                                Khứ hồi
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-check ms-4">
-                        <input class="form-check-input" type="radio" name="direct">
-                        <label class="form-check-label">
-                            Khứ hồi
-                        </label>
+                @else 
+                    <div class="col-lg-6 col-md-12 d-flex">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="direct" value="0" checked>
+                            <label class="form-check-label">
+                                Một chiều
+                            </label>
+                        </div>
+                        <div class="form-check ms-4">
+                            <input class="form-check-input" type="radio" name="direct" value="1">
+                            <label class="form-check-label">
+                                Khứ hồi
+                            </label>
+                        </div>
                     </div>
-                </div>
+                @endif
+
                 <div class="col-lg-6 col-md-12 text-end">
                     <a href="">Hướng dẫn mua vé</a>
                 </div>
@@ -27,10 +46,20 @@
                     <div class="d-flex flex-column flex-md-row w-100">
                         <div class="flex-fill col-md-5">
                             <label class="form-label">Điểm đi</label>
-                            <select name="address-from" id="address-from" class="form-control">
+                            <select name="address_from" id="address-from" class="form-control">
                                 <option value="">Chọn điểm đi</option>
                                 @foreach ($departurePoints as $departurePoint)
-                                    <option value="{{ $departurePoint['departurepoint_id'] }}">{{ $departurePoint['departurepoint_name'] }}</option>
+                                    @if (isset($departurePointId) && $departurePointId == $departurePoint['departurepoint_id'])
+                                        <option value="{{ $departurePoint['departurepoint_id'] }}" selected
+                                            data-arrivalpoints="{{ json_encode($departurePoint['arrivalpoints']) }}">
+                                            {{ $departurePoint['departurepoint_name'] }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $departurePoint['departurepoint_id'] }}"
+                                            data-arrivalpoints="{{ json_encode($departurePoint['arrivalpoints']) }}">
+                                            {{ $departurePoint['departurepoint_name'] }}
+                                        </option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -39,31 +68,41 @@
                         </div>
                         <div class="flex-fill col-md-5">
                             <label class="form-label">Điểm đến</label>
-                            <select name="address-to" id="address-to" class="form-control">
+                            <select name="address_to" id="address-to" class="form-control">
                                 <option value="">Chọn điểm đến</option>
-                                @foreach ($arrivalPoints as $arrivalPoint)
-                                    <option value="{{ $arrivalPoint['arrivalpoint_id'] }}">{{ $arrivalPoint['arrivalpoint_name'] }}</option>
-                                @endforeach
+                                    @foreach ($arrivalPoints as $arrivalPoint)
+                                        @if (isset($arrivalPointId) && $arrivalPointId == $arrivalPoint['arrivalpoint_id'])
+                                            <option value="{{ $arrivalPoint['arrivalpoint_id'] }}" selected>{{ $arrivalPoint['arrivalpoint_name'] }}</option>
+                                        @else
+                                            <option value="{{ $arrivalPoint['arrivalpoint_id'] }}">{{ $arrivalPoint['arrivalpoint_name'] }}</option>
+                                        @endif
+                                    @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
+
+                <script src="{{ asset('assets/js/home.js') }}"></script>
             
                 <div class="col-lg-6 col-md-12 d-flex justify-content-between">
                     <div class="d-flex flex-column flex-md-row w-100">
                         <div class="flex-fill col-md-5">
                             <label class="form-label">Ngày đi</label>
-                            <input type="date" class="form-control" name="date-start">
+                            @if (isset($departureDate))
+                                <input type="date" class="form-control" name="date_start" value="{{ $departureDate }}" id="date-start">
+                            @else
+                                <input type="date" class="form-control" name="date_start" id="date-start">
+                            @endif
                         </div>
                         <div class="flex-fill col-md-5 ms-3">
                             <label class="form-label">Số vé</label>
-                            <select name="number-ticket" id="custom-select" class="form-control custom-select">
+                            <select name="number_ticket" id="custom-select" class="form-control custom-select">
                                 <option value="">Chọn số vé</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
+                                @foreach ([1, 2, 3, 4, 5] as $option)
+                                    <option value="{{ $option }}" {{ isset($ticket) && $ticket == $option ? 'selected' : '' }}>
+                                        {{ $option }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
