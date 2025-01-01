@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="m-0"><i class="bi bi-filter-left"></i> Bộ lọc</h3>
-            <button type="button" class="badge bg-primary border-0" id="clear-filters-btn">
+            <button type="button" class="badge bg-warning border-0" id="clear-filters-btn">
                 <i class="fa-solid fa-trash"></i>&nbsp; Xoá bộ lọc
             </button>
         </div>

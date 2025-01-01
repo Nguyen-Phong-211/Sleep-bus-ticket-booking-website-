@@ -58,11 +58,32 @@ class ReservationController extends Controller
                 ->first();
         };
 
-        $status_seat_limousine = $getSeatStatus(1, 0);  
-        $status_seat_sleepbus = $getSeatStatus(2, 0);  
-        $status_seat_coach = $getSeatStatus(3, 0);   
+        $status_seat_limousine = $getSeatStatus(1, 0);
+        $status_seat_sleepbus = $getSeatStatus(2, 0);
+        $status_seat_coach = $getSeatStatus(3, 0);
 
-        return view('reservation.reservation', compact('routes', 'status_seat_limousine', 'status_seat_sleepbus', 'status_seat_coach'));
+        $displaySeats = DB::table('seats as s')
+            ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
+            ->join('floors as f', 'f.floor_id', '=', 's.floor_id')
+            ->select(
+                's.*',
+                'tv.type_vehicle_name',
+                'tv.max_seat',
+                'f.floor_name'
+            )
+            ->whereIn('s.type_vehicle_id', [1, 2, 3])
+            ->get();
+
+        return view(
+            'reservation.reservation',
+            compact(
+                'routes',
+                'status_seat_limousine',
+                'status_seat_sleepbus',
+                'status_seat_coach',
+                'displaySeats',
+            )
+        );
     }
 
 
@@ -134,6 +155,18 @@ class ReservationController extends Controller
             'coach' => $status_seat_coach,
         ];
 
+        $displaySeats = DB::table('seats as s')
+            ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
+            ->join('floors as f', 'f.floor_id', '=', 's.floor_id')
+            ->select(
+                's.*',
+                'tv.type_vehicle_name',
+                'tv.max_seat',
+                'f.floor_name'
+            )
+            ->whereIn('s.type_vehicle_id', [1, 2, 3])
+            ->get();
+
         foreach ($status_seats as $key => $status_seat) {
             if ($ticket <= $status_seat->status_seat) {
                 return view('reservation.reservation', [
@@ -147,6 +180,7 @@ class ReservationController extends Controller
                     'status_seat_limousine' => $status_seat_limousine,
                     'status_seat_sleepbus' => $status_seat_sleepbus,
                     'status_seat_coach' => $status_seat_coach,
+                    'displaySeats' => $displaySeats,
                 ]);
             }
         }
@@ -164,6 +198,7 @@ class ReservationController extends Controller
             'status_seat_limousine' => $status_seat_limousine,
             'status_seat_sleepbus' => $status_seat_sleepbus,
             'status_seat_coach' => $status_seat_coach,
+            'displaySeats' => $displaySeats,
         ]);
     }
     //find route by price
@@ -214,11 +249,23 @@ class ReservationController extends Controller
                 ->first();
         };
 
-        $status_seat_limousine = $getSeatStatus(1, 0);  
-        $status_seat_sleepbus = $getSeatStatus(2, 0);  
-        $status_seat_coach = $getSeatStatus(3, 0);   
+        $status_seat_limousine = $getSeatStatus(1, 0);
+        $status_seat_sleepbus = $getSeatStatus(2, 0);
+        $status_seat_coach = $getSeatStatus(3, 0);
 
-        return view('reservation.reservation', compact('routes', 'status_seat_limousine', 'status_seat_sleepbus', 'status_seat_coach', 'price_range'));
+        $displaySeats = DB::table('seats as s')
+            ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
+            ->join('floors as f', 'f.floor_id', '=', 's.floor_id')
+            ->select(
+                's.*',
+                'tv.type_vehicle_name',
+                'tv.max_seat',
+                'f.floor_name'
+            )
+            ->whereIn('s.type_vehicle_id', [1, 2, 3])
+            ->get();
+
+        return view('reservation.reservation', compact('routes', 'status_seat_limousine', 'status_seat_sleepbus', 'status_seat_coach', 'price_range', 'displaySeats'));
     }
     //filter route
     public function filterRoutes(Request $request)
@@ -230,49 +277,49 @@ class ReservationController extends Controller
         $time_filters = $request->input('time_filters', []);
 
         $query = DB::table('routes as r')
-        ->join('departurepoints as d', 'r.departurepoint_id', '=', 'd.departurepoint_id')
-        ->join('arrivalpoints as a', 'r.arrivalpoint_id', '=', 'a.arrivalpoint_id')
-        ->join('route_details as rd', 'rd.route_id', '=', 'r.route_id')
-        ->join('route_schedules as rs', 'rs.route_id', '=', 'r.route_id')
-        ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 'r.type_vehicle_id')
-        ->join('row_seats as rst', 'rst.row_seat_id', '=', 'r.row_seat_id')
-        ->join('floors as f', 'f.floor_id', '=', 'r.floor_id')
-        ->join('type_times as tt', 'tt.type_time_id', '=', 'r.type_time_id')
-        ->select(
-            'r.*',
-            'd.departurepoint_name',
-            'd.detail_address as d_detail_address',
-            'd.one_way as d_one_way',
-            'a.arrivalpoint_name',
-            'a.detail_address as a_detail_address',
-            'rd.*',
-            'rs.*',
-            'tv.type_vehicle_name',
-            'rst.row_seat_name',
-            'f.floor_name',
-            'tt.*'
-        );
+            ->join('departurepoints as d', 'r.departurepoint_id', '=', 'd.departurepoint_id')
+            ->join('arrivalpoints as a', 'r.arrivalpoint_id', '=', 'a.arrivalpoint_id')
+            ->join('route_details as rd', 'rd.route_id', '=', 'r.route_id')
+            ->join('route_schedules as rs', 'rs.route_id', '=', 'r.route_id')
+            ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 'r.type_vehicle_id')
+            ->join('row_seats as rst', 'rst.row_seat_id', '=', 'r.row_seat_id')
+            ->join('floors as f', 'f.floor_id', '=', 'r.floor_id')
+            ->join('type_times as tt', 'tt.type_time_id', '=', 'r.type_time_id')
+            ->select(
+                'r.*',
+                'd.departurepoint_name',
+                'd.detail_address as d_detail_address',
+                'd.one_way as d_one_way',
+                'a.arrivalpoint_name',
+                'a.detail_address as a_detail_address',
+                'rd.*',
+                'rs.*',
+                'tv.type_vehicle_name',
+                'rst.row_seat_name',
+                'f.floor_name',
+                'tt.*'
+            );
 
         if ($date_filter) {
             $query->where('rs.departure_date', '=', $date_filter);
         }
-    
+
         if ($vehicle_type && $vehicle_type != 'all') {
             $query->where('r.type_vehicle_id', '=', $vehicle_type);
         }
-    
+
         if ($sit_type && $sit_type != 'all') {
             $query->where('r.row_seat_id', '=', $sit_type);
         }
-    
+
         if ($floor_type && $floor_type != 'all') {
             $query->where('r.floor_id', '=', $floor_type);
         }
-    
+
         if (!empty($time_filters)) {
             $query->whereIn('r.type_time_id', $time_filters);
         }
-    
+
         $routes = $query->get();
 
         $getSeatStatus = function ($typeVehicleId, $status) {
@@ -285,10 +332,35 @@ class ReservationController extends Controller
                 ->first();
         };
 
-        $status_seat_limousine = $getSeatStatus(1, 0);  
-        $status_seat_sleepbus = $getSeatStatus(2, 0);  
-        $status_seat_coach = $getSeatStatus(3, 0);   
+        $status_seat_limousine = $getSeatStatus(1, 0);
+        $status_seat_sleepbus = $getSeatStatus(2, 0);
+        $status_seat_coach = $getSeatStatus(3, 0);
 
-        return view('reservation.reservation', compact('routes', 'status_seat_limousine', 'status_seat_sleepbus', 'status_seat_coach', 'date_filter', 'vehicle_type', 'sit_type', 'floor_type', 'time_filters'));
+        $displaySeats = DB::table('seats as s')
+            ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
+            ->join('floors as f', 'f.floor_id', '=', 's.floor_id')
+            ->select(
+                's.*',
+                'tv.type_vehicle_name',
+                'tv.max_seat',
+                'f.floor_name'
+            )
+            ->whereIn('s.type_vehicle_id', [1, 2, 3])
+            ->get();
+
+        return view('reservation.reservation', 
+        compact(
+                'routes', 
+            'status_seat_limousine', 
+                'status_seat_sleepbus', 
+                'status_seat_coach', 
+                'date_filter', 
+                'vehicle_type', 
+                'sit_type', 
+                'floor_type', 
+                'time_filters', 
+                'displaySeats'
+            )
+        );
     }
 }

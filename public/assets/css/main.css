@@ -2527,3 +2527,10 @@ section,
 .autocomplete-item:hover {
     background-color: #f1f1f1;
 }
+
+/* custom background checkbox */
+.select-success{
+    background-color: #74bd43;
+    border: 0px solid #74bd43;
+    cursor: not-allowed;
+}

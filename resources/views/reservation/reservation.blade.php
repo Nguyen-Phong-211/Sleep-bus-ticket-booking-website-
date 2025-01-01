@@ -237,14 +237,14 @@
                                                     @endif
 
                                                     <div class="tab-content" id="pills-tabContent">
+
                                                         <div class="tab-pane fade"
-                                                            id="pills-home{{ $route->route_id }}" role="tabpanel"
-                                                            aria-labelledby="pills-home-tab">
-                                                            <hr>
+                                                            id="pills-home{{ $route->route_id }}" role="tabpanel">
 
                                                             @include('reservation.seat-selection')
 
                                                         </div>
+
                                                         <div class="tab-pane fade"
                                                             id="pills-profile{{ $route->route_id }}" role="tabpanel"
                                                             aria-labelledby="pills-profile-tab">
@@ -253,6 +253,7 @@
                                                             @include('reservation.ininerary')
 
                                                         </div>
+
                                                         <div class="tab-pane fade"
                                                             id="pills-contact{{ $route->route_id }}" role="tabpanel"
                                                             aria-labelledby="pills-contact-tab">
