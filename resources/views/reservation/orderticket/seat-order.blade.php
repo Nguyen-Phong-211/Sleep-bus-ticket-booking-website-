@@ -1,192 +1,222 @@
-<div class="col-6 col-md-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Tầng dưới</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;A01
-                </li>
-                <li class="list-group-item d-flex"><i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A03
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
+@if ($type_vehicle_id == 3)
+    <ul class="list-group list-group-flush w-100">
+        <div class="row row-cols-2 row-cols-md-3 g-3">
+            @foreach ($displaySeats as $seat)
+                @if ($seat->type_vehicle_id == 3)
+                    <div class="col-md-6">
+                        @if ($seat->status == 0)
+                            <div class="d-flex flex-column h-100">
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-top">
+                                    <span>
+                                        <i class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;
+                                        {{ $seat->seat_name }}
+                                    </span>
+                                    <div class="form-check">
+                                        @php
+                                            $seatNamesArray = explode(',', $seat_name);
+                                        @endphp
+
+                                        @if (in_array($seat->seat_name, $seatNamesArray))
+                                            <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                checked data-seat-number="{{ $seat->seat_name }}"
+                                                data-seatId="{{ $seat->seat_id }}"
+                                                onchange="updateTotalPrice('{{ $route }}')"
+                                                value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Click để chọn ghế ngồi">
+                                        @else
+                                            <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                data-seat-number="{{ $seat->seat_name }}"
+                                                data-seatId="{{ $seat->seat_id }}"
+                                                onchange="updateTotalPrice('{{ $route }}')"
+                                                value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Click để chọn ghế ngồi">
+                                        @endif
+                                    </div>
+                                </li>
+                            </div>
+                        @else
+                            <div class="d-flex flex-column h-100">
+                                <li
+                                    class="list-group-item d-flex justify-content-between align-items-center border-top">
+                                    <span>
+                                        <i class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;
+                                        {{ $seat->seat_name }}
+                                    </span>
+                                    <div class="form-check">
+                                        <input disabled class="form-check-input checkbox-select-seat select-success"
+                                            type="checkbox" title="Ghế đã chọn" value="{{ $seat->seat_name }}">
+                                    </div>
+                                </li>
+                            </div>
+                        @endif
                     </div>
-                </li>
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;A06
-                </li>
-                <li class="list-group-item d-flex"><i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A09
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
+                @endif
+            @endforeach
+        </div>
+
+        <div class="row mt-3">
+            <img src="{{ asset('assets/img/general/so-do-ghe-tren-xe-khach.png') }}" alt="">
+        </div>
+    </ul>
+@else
+    @php
+        $seatsByFloor = $displaySeats->where('type_vehicle_id', $type_vehicle_id)->groupBy('floor_name');
+    @endphp
+
+    <div class="row">
+        <div class="col-md-6">
+            <h6>Tầng 2</h6>
+            @if (isset($seatsByFloor['Tầng 2']))
+                <ul class="list-group list-group-flush w-100">
+                    <div class="row row-cols-2 row-cols-md-3 g-3">
+                        @foreach ($seatsByFloor['Tầng 2'] as $seat)
+                            <div class="col-md-6">
+                                @if ($seat->status == 0)
+                                    <div class="d-flex flex-column h-100">
+                                        <li
+                                            class="list-group-item d-flex justify-content-between align-items-center border-top">
+                                            <span>
+                                                <i
+                                                    class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;
+                                                {{ $seat->seat_name }}
+                                            </span>
+                                            <div class="form-check">
+                                                @php
+                                                    $seatNamesArray = explode(',', $seat_name);
+                                                @endphp
+
+                                                @if (in_array($seat->seat_name, $seatNamesArray))
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                        checked data-seat-number="{{ $seat->seat_name }}"
+                                                        data-seatId="{{ $seat->seat_id }}"
+                                                        onchange="updateTotalPrice('{{ $route }}')"
+                                                        value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Click để chọn ghế ngồi">
+                                                @else
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                        data-seat-number="{{ $seat->seat_name }}"
+                                                        data-seatId="{{ $seat->seat_id }}"
+                                                        onchange="updateTotalPrice('{{ $route }}')"
+                                                        value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Click để chọn ghế ngồi">
+                                                @endif
+
+                                            </div>
+                                        </li>
+                                    </div>
+                                @else
+                                    <div class="d-flex flex-column h-100">
+                                        <li
+                                            class="list-group-item d-flex justify-content-between align-items-center border-top">
+                                            <span>
+                                                <i
+                                                    class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;
+                                                {{ $seat->seat_name }}
+                                            </span>
+                                            <div class="form-check">
+                                                <input disabled
+                                                    class="form-check-input checkbox-select-seat select-success"
+                                                    type="checkbox" title="Ghế đã chọn" value="{{ $seat->seat_name }}">
+                                            </div>
+                                        </li>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
                     </div>
-                </li>
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;A12
-                </li>
-                <li class="list-group-item d-flex">
-                    <i class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A15
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
+                </ul>
+            @else
+                <p>Không có ghế ở tầng này.</p>
+            @endif
+        </div>
+
+        <div class="col-md-6">
+            <h6>Tầng 1</h6>
+            @if (isset($seatsByFloor['Tầng 1']))
+                <ul class="list-group list-group-flush w-100">
+                    <div class="row row-cols-2 row-cols-md-3 g-3">
+                        @foreach ($seatsByFloor['Tầng 1'] as $seat)
+                            <div class="col-md-6">
+                                @if ($seat->status == 0)
+                                    <div class="d-flex flex-column h-100">
+                                        <li
+                                            class="list-group-item d-flex justify-content-between align-items-center border-top">
+                                            <span>
+                                                <i
+                                                    class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;
+                                                {{ $seat->seat_name }}
+                                            </span>
+                                            <div class="form-check">
+                                                @php
+                                                    $seatNamesArray = explode(',', $seat_name);
+                                                @endphp
+
+                                                @if (in_array($seat->seat_name, $seatNamesArray))
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                        checked data-seat-number="{{ $seat->seat_name }}"
+                                                        data-seatId="{{ $seat->seat_id }}"
+                                                        onchange="updateTotalPrice('{{ $route }}')"
+                                                        value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Click để chọn ghế ngồi">
+                                                @else
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                        data-seat-number="{{ $seat->seat_name }}"
+                                                        data-seatId="{{ $seat->seat_id }}"
+                                                        onchange="updateTotalPrice('{{ $route }}')"
+                                                        value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Click để chọn ghế ngồi">
+                                                @endif
+                                            </div>
+                                        </li>
+                                    </div>
+                                @else
+                                    <div class="d-flex flex-column h-100">
+                                        <li
+                                            class="list-group-item d-flex justify-content-between align-items-center border-top">
+                                            <span>
+                                                <i
+                                                    class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;
+                                                {{ $seat->seat_name }}
+                                            </span>
+                                            <div class="form-check">
+                                                <input disabled
+                                                    class="form-check-input checkbox-select-seat select-success"
+                                                    type="checkbox" title="Ghế đã chọn" value="{{ $seat->seat_name }}">
+                                            </div>
+                                        </li>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
                     </div>
-                </li>
-            </ul>
+                </ul>
+            @else
+                <p>Không có ghế ở tầng này.</p>
+            @endif
         </div>
     </div>
-</div>
-<div class="col-6 col-md-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Tầng dưới</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex">
-                    <i class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A02
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item d-flex">
-                    <i class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A04
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;A07
-                </li>
-                <li class="list-group-item d-flex">
-                    <i class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A10
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A13
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;A16
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-            </ul>
+
+    @if ($type_vehicle_id == 1)
+        <div class="row">
+            <img src="{{ asset('assets/img/general/so-do-ghe-tren-xe-limousine.jpg') }}" alt=""
+                class="img-fluid" width="100%" height="300px">
         </div>
-    </div>
-</div>
-<div class="col-6 col-md-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Tầng trên</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;B01
-                </li>
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;B03
-                </li>
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;B06
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;B09
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;B12
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;B15
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-            </ul>
+    @elseif ($type_vehicle_id == 2)
+        <div class="row mt-3">
+            <img src="{{ asset('assets/img/general/so-de-ghe-xe-giuong-nam.jpg') }}" alt="" class="img-fluid"
+                width="100%" height="200px">
         </div>
-    </div>
-</div>
-<div class="col-6 col-md-3">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Tầng trên</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;B02
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;B04
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;B07
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item"><i
-                        class="bi bi-bookmark-x-fill text-danger icon-primary"></i>&nbsp;&nbsp;B10
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;B13
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-                <li class="list-group-item d-flex">
-                    <i
-                        class="bi bi-bookmark-plus text-success icon-primary"></i>&nbsp;&nbsp;B16
-                    <div class="form-check ms-3">
-                        <input class="form-check-input checkbox-select-seat" type="checkbox"
-                            value="" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Click để chọn ghế ngồi">
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+    @endif
+@endif
+
+<form id="ticket-form" action="{{ route('orderticket.displayVar', ['route' => $route]) }}" method="get" data-route-id="{{ $route }}">
+    <input type="hidden" id="selected-seats-count{{ $route }}" name="ticket" value="0">
+    {{-- <input type="hidden" id="total-price-value{{ $route }}" name="total_price" value="{{ $total_price }}"> --}}
+    <input type="hidden" id="selected-seats-name{{ $route }}" name="seat_name" value="">
+    <input type="hidden" id="select-type-vehicle" name="type_vehicle_id" value="{{ $type_vehicle_id }}">
+    <input type="hidden" id="selected-route" name="route" value="{{ $route }}">
+
+    <button type="submit" class="btn btn-primary btn-custom border-0">
+        <i class="bi bi-check2-circle"></i>&nbsp;Chọn vé
+    </button>
+</form>

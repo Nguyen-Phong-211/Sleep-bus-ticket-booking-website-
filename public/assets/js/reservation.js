@@ -37,12 +37,13 @@ $(document).ready(function() {
     var maxDateFormatted = maxyyyy + '-' + maxmm + '-' + maxdd;
 
     // Gán giá trị cho input
-    $('#date-filter').attr('min', todayDate);  // Ngày bắt đầu từ hôm nay
-    $('#date-filter').attr('max', maxDateFormatted);  // Giới hạn 3 tháng tới
+    $('#date-filter').attr('min', todayDate);  
+    $('#date-filter').attr('max', maxDateFormatted);  
 
     // Không cho phép chọn năm
     $('#date-filter').attr('onfocus', 'this.blur()');
 });
+
 
 document.getElementById('clear-filters-btn').addEventListener('click', function() {
     var form = document.getElementById('filters-form');
@@ -61,4 +62,76 @@ document.getElementById('clear-filters-btn').addEventListener('click', function(
     });
 
     window.location.href = window.location.pathname;
+});
+
+// Xử lý việc chọn ghế, tính tổng tiền
+$(document).ready(function() {
+    const maxSeats = 5;  
+    let selectedSeats = 0;
+    let selectedSeatNames = [];
+    let selectedSeatIds = [];  
+
+    // Hàm cập nhật tổng tiền và ghế đã chọn
+    function updateTotalPrice(routeId) {
+        const pricePerSeat = parseInt($('#total-price' + routeId).data('price'), 10); 
+
+        if (isNaN(pricePerSeat)) {
+            console.error("Giá vé không hợp lệ");
+            return;
+        }
+
+        const totalPrice = selectedSeats * pricePerSeat;
+
+        if (isNaN(totalPrice) || totalPrice < 0) {
+            console.error("Tổng tiền không hợp lệ");
+            return;
+        }
+
+        $('#total-price' + routeId).text(`Tổng tiền: ${new Intl.NumberFormat().format(totalPrice)} đồng`);
+
+        const seatText = selectedSeats === 1 
+            ? `1 vé: ${selectedSeatNames.join(', ')}`
+            : `${selectedSeats} vé: ${selectedSeatNames.join(', ')}`;
+        $('#selected-seats' + routeId).text(seatText);
+
+        // Cập nhật các giá trị vào các input ẩn
+        $('#selected-seats-count' + routeId).val(selectedSeats);  
+        $('#total-price-value' + routeId).val(totalPrice); 
+        $(`#selected-seats-name${routeId}`).val(selectedSeatNames.join(','));
+        $('#selected-seats-id' + routeId).val(selectedSeatIds.join(','));
+    }
+
+    // Xử lý sự kiện khi checkbox thay đổi
+    $('.checkbox-select-seat').on('change', function(event) {
+        const $checkbox = $(this);
+        const seatName = $checkbox.data('seat-number');  
+        const seatId = $checkbox.data('seatId');        
+        const routeId = $checkbox.data('route-id');     
+
+        if ($checkbox.is(':checked')) {
+            if (selectedSeats < maxSeats) {
+                selectedSeats++;
+                selectedSeatNames.push(seatName);
+                selectedSeatIds.push(seatId); 
+            } else {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "warning",
+                    title: "Chỉ chọn tối đa 5 ghế",
+                    showConfirmButton: false,
+                    timer: 2000,
+                });
+                $checkbox.prop('checked', false); 
+                return;
+            }
+        } else {
+            // Nếu ghế bị bỏ chọn
+            selectedSeats--;
+            selectedSeatNames = selectedSeatNames.filter(name => name !== seatName);
+            selectedSeatIds = selectedSeatIds.filter(id => id !== seatId);  
+        }
+
+        // Cập nhật tổng tiền và danh sách ghế
+        updateTotalPrice(routeId);
+    });
 });

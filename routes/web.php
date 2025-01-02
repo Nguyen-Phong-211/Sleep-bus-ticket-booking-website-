@@ -110,6 +110,7 @@ Route::prefix('setting')->group(function () {
 //order-ticket
 Route::prefix('reservation/orderticket')->group(function () {
     Route::get('/', [OrderTicketController::class, 'index'])->name('orderticket.index');
+    Route::get('/display', [OrderTicketController::class, 'displayVar'])->name('orderticket.displayVar');
 });
 
 //otp

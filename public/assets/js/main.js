@@ -203,32 +203,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// check seat <= 5
-const checkboxes = document.querySelectorAll(".checkbox-select-seat");
-let selectedSeats = 0;
-
-checkboxes.forEach((checkbox) => {
-  checkbox.addEventListener("change", (event) => {
-    if (event.target.checked) {
-      selectedSeats++;
-    } else {
-      selectedSeats--;
-    }
-
-    if (selectedSeats > 5) {
-      Swal.fire({
-        position: "top-end",
-        icon: "warning",
-        title: "Chỉ chọn tối đa 5 chỗ ngồi",
-        showConfirmButton: false,
-        timer: 2000,
-      });
-      event.target.checked = false;
-      selectedSeats--;
-    }
-  });
-});
-
 // logout
 document.getElementById('logoutLink').addEventListener('click', function (event) {
   event.preventDefault();

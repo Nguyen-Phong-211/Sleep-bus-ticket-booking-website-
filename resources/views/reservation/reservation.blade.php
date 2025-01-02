@@ -193,7 +193,7 @@
                                                         <hr>
                                                         <div
                                                             class="d-flex justify-content-evenly align-items-center mb-3 mt-3">
-                                                            <a href="{{ route('orderticket.index', ['route' => $route->route_id]) }}"
+                                                            <a href="{{ route('orderticket.index', ['route' => $route->route_id, 'type_vehicle_id' => $route->type_vehicle_id]) }}"
                                                                 class="btn btn-primary w-auto border-0 text-uppercase rounded-5 p-3">
                                                                 <i class="bi bi-bookmark-check"></i>&nbsp; Chọn tuyến
                                                             </a>
