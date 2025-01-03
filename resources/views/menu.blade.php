@@ -42,19 +42,20 @@
                                     class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
                                 <li>
-                                    <a href="#">
+                                    <a href="{{ route('lang.language', ['locale' => 'vi']) }}">
                                         <img src="{{ asset('assets/img/general/la-co-viet-nam.png') }}" alt="" class="img-fluid" height="40px" width="40px">
                                         TIẾNG VIỆT
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="{{ route('lang.language', ['locale' => 'en']) }}">
                                         <img src="{{ asset('assets/img/general/la-co-nuoc-anh.png') }}" alt="" class="img-fluid" height="40px" width="40px">
                                         TIẾNG ANH
                                     </a>
                                 </li>
                             </ul>
                         </li>
+                        <li><a href="{{ route('admin.index') }}" id="" class="dropdown-item">Quản lý</a>
                     </ul>
                 </li>
             </ul>

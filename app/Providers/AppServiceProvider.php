@@ -11,6 +11,8 @@ use App\Models\TypeTime;
 use App\Models\TypeVehicle;
 use App\Models\Floor;
 use App\Models\RowSeat;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,5 +42,9 @@ class AppServiceProvider extends ServiceProvider
                 'rowSeats' => RowSeat::all(),
             ]);
         });
+
+        if (Session::has('locale')) {
+            App::setLocale(Session::get('locale'));
+        }
     }
 }

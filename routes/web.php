@@ -19,6 +19,7 @@ use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\OrderTicket\OrderTicketController;
 use App\Http\Controllers\Departurepoint\DeparturepointController;
 use App\Http\Controllers\Arrivalpoint\ArrivalpointController;
+use App\Http\Controllers\Lang\LanguageController;
 
 //home
 Route::controller(HomeController::class)->group(function(){
@@ -116,5 +117,25 @@ Route::prefix('reservation/orderticket')->group(function () {
 //otp
 Route::post('authu/otp/verify', [OtpController::class,'verifyOtp'])->name('otp.verify');
 
+//language
+Route::prefix('lang')->group(function () {
+    Route::get('/{locale}', [LanguageController::class,'changeLanguage'])->name('lang.language');
+});
 
 
+// ----------------------------------------------------------------------------------------------------------------------------------------
+// Admin
+use App\Http\Controllers\Admin\Dashbroad\DashbroadController;
+use App\Http\Controllers\Admin\Logout\AdminLogoutController;
+
+
+
+//Admin
+Route::prefix('admin')->group(function () {
+    Route::get('/dashbroad', [DashbroadController::class, 'index'])->name('admin.index');
+});
+
+// Logout
+Route::prefix('admin')->group(function () {
+    Route::get('/logout', [AdminLogoutController::class, 'logout'])->name('admin.logout');
+});
