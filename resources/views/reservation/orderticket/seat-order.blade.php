@@ -20,14 +20,12 @@
                                             <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                 checked data-seat-number="{{ $seat->seat_name }}"
                                                 data-seatId="{{ $seat->seat_id }}"
-                                                onchange="updateTotalPrice('{{ $route }}')"
                                                 value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Click để chọn ghế ngồi">
                                         @else
-                                            <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                            <input class="form-check-input checkbox-select-seat" type="checkbox" disabled
                                                 data-seat-number="{{ $seat->seat_name }}"
                                                 data-seatId="{{ $seat->seat_id }}"
-                                                onchange="updateTotalPrice('{{ $route }}')"
                                                 value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Click để chọn ghế ngồi">
                                         @endif
@@ -89,14 +87,12 @@
                                                     <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                         checked data-seat-number="{{ $seat->seat_name }}"
                                                         data-seatId="{{ $seat->seat_id }}"
-                                                        onchange="updateTotalPrice('{{ $route }}')"
                                                         value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                 @else
-                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox" disabled
                                                         data-seat-number="{{ $seat->seat_name }}"
                                                         data-seatId="{{ $seat->seat_id }}"
-                                                        onchange="updateTotalPrice('{{ $route }}')"
                                                         value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                 @endif
@@ -155,14 +151,12 @@
                                                     <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                         checked data-seat-number="{{ $seat->seat_name }}"
                                                         data-seatId="{{ $seat->seat_id }}"
-                                                        onchange="updateTotalPrice('{{ $route }}')"
                                                         value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                 @else
-                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox" disabled
                                                         data-seat-number="{{ $seat->seat_name }}"
                                                         data-seatId="{{ $seat->seat_id }}"
-                                                        onchange="updateTotalPrice('{{ $route }}')"
                                                         value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                 @endif
@@ -209,14 +203,5 @@
     @endif
 @endif
 
-<form id="ticket-form" action="{{ route('orderticket.displayVar', ['route' => $route]) }}" method="get" data-route-id="{{ $route }}">
-    <input type="hidden" id="selected-seats-count{{ $route }}" name="ticket" value="0">
-    {{-- <input type="hidden" id="total-price-value{{ $route }}" name="total_price" value="{{ $total_price }}"> --}}
-    <input type="hidden" id="selected-seats-name{{ $route }}" name="seat_name" value="">
-    <input type="hidden" id="select-type-vehicle" name="type_vehicle_id" value="{{ $type_vehicle_id }}">
-    <input type="hidden" id="selected-route" name="route" value="{{ $route }}">
 
-    <button type="submit" class="btn btn-primary btn-custom border-0">
-        <i class="bi bi-check2-circle"></i>&nbsp;Chọn vé
-    </button>
-</form>
+</script>

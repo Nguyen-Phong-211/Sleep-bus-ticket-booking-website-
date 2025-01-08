@@ -46,7 +46,7 @@ Route::prefix('clause')->group(function () {
 //schedule
 Route::prefix('schedule')->group(function () {
     Route::get('/', [ScheduleController::class, 'index'])->name('schedule.index'); 
-    Route::post('/findroute', [ScheduleController::class, 'getRoutes'])->name('schedule.getRoutes'); 
+    // Route::post('/findroute', [ScheduleController::class, 'getRoutes'])->name('schedule.getRoutes'); 
 });
 
 //consultation
@@ -111,7 +111,6 @@ Route::prefix('setting')->group(function () {
 //order-ticket
 Route::prefix('reservation/orderticket')->group(function () {
     Route::get('/', [OrderTicketController::class, 'index'])->name('orderticket.index');
-    Route::get('/display', [OrderTicketController::class, 'displayVar'])->name('orderticket.displayVar');
 });
 
 //otp
@@ -127,6 +126,8 @@ Route::prefix('lang')->group(function () {
 // Admin
 use App\Http\Controllers\Admin\Dashbroad\DashbroadController;
 use App\Http\Controllers\Admin\Logout\AdminLogoutController;
+use App\Http\Controllers\Admin\Vehicle\ManagementVehicleController;
+use App\Http\Controllers\Admin\Vehicle\ManagementTypeVehicleController;
 
 
 
@@ -138,4 +139,14 @@ Route::prefix('admin')->group(function () {
 // Logout
 Route::prefix('admin')->group(function () {
     Route::get('/logout', [AdminLogoutController::class, 'logout'])->name('admin.logout');
+});
+
+// Vehicle
+Route::prefix('admin')->group(function () {
+    Route::get('/vehicle', [ManagementVehicleController::class, 'index'])->name('admin.vehicle');
+});
+
+// TypeVehicle
+Route::prefix('admin')->group(function () {
+    Route::get('/typevehicle', [ManagementTypeVehicleController::class, 'index'])->name('admin.typevehicle');
 });

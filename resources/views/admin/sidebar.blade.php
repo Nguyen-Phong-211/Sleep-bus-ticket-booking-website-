@@ -16,12 +16,12 @@
             </a>
             <ul id="management-vehicle" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="">
+                    <a href="{{ route('admin.typevehicle') }}">
                         <i class="bi bi-circle"></i><span>Danh mục phương tiện</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ route('admin.vehicle') }}">
                         <i class="bi bi-circle"></i><span>Phương tiện</span>
                     </a>
                 </li>

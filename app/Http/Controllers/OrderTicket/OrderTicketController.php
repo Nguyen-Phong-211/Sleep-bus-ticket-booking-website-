@@ -14,6 +14,8 @@ class OrderTicketController extends Controller
         $type_vehicle_id = $request->input('type_vehicle_id');
         $route = $request->input('route');
         $seat_name = $request->input('seat_name');
+        $total_price = $request->input('total_price');
+        $routeId = $request->input('route');
 
         $displaySeats = DB::table('seats as s')
             ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
@@ -27,30 +29,24 @@ class OrderTicketController extends Controller
             ->whereIn('s.type_vehicle_id', [1, 2, 3])
             ->get();
 
+        $branches = DB::table('branches')
+        ->get();
+
+        $info_departures = DB::table('departurepoints as d')
+        ->join('routes as r', 'r.departurepoint_id', '=', 'd.departurepoint_id')
+        ->join('route_schedules as rs', 'rs.route_id', '=', 'r.route_id')
+        ->where('r.route_id', '=', $routeId)
+        ->get();
+
         return view('reservation/orderticket.orderticket',
          compact(
             'type_vehicle_id',
             'route',
             'displaySeats',
-            'seat_name'
-            )
-        );
-    }
-    public function displayVar(Request $request)
-    {
-        $type_vehicle_id = $request->input('type_vehicle_id');
-        $route = $request->input('route');
-        $seat_name = $request->input('seat_name');
-        $total_price = $request->input('total_price');
-
-        dd($type_vehicle_id, $route, $seat_name, $total_price);
-
-        return view('reservation/orderticket.orderticket',
-         compact(
-            'type_vehicle_id',
-            'route',
             'seat_name',
-            'total_price'
+            'total_price',
+            'branches',
+            'info_departures'
             )
         );
     }

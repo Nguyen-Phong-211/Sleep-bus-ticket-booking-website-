@@ -30,10 +30,10 @@
                         <div class="contact-form" data-aos="fade-up" data-aos-delay="300">
                             <h3>TÌM LỊCH TRÌNH</h3>
 
-                            <form action="{{ route('schedule.getRoutes') }}" method="post" class="mt-4" data-aos="fade-up" data-aos-delay="200">
+                            <form action="" method="post" class="mt-4" data-aos="fade-up" data-aos-delay="200">
                                 @csrf
-                                <div class="row align-items-center g-3">
-                                    <div class="col-12 col-md-4">
+                                <div class="row align-items-center g-3 d-flex justify-content-between">
+                                    <div class="col-12 col-md-5">
                                         <label class="form-label">Điểm đi</label>
                                         <select name="address_from" id="address-from" class="form-control">
                                             <option value="">Chọn điểm đi</option>
@@ -53,11 +53,11 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-auto d-flex justify-content-center">
-                                        <i class="fa-solid fa-arrows-left-right"></i>
+                                    <div class="col-md-2 text-center icon-two-direct">
+                                        <i class="fa-solid fa-arrows-left-right icon-direct"></i>
                                     </div>
 
-                                    <div class="col-12 col-md-4">
+                                    <div class="col-12 col-md-5">
                                         <label class="form-label">Điểm đến</label>
                                         <select name="address_to" id="address-to" class="form-control">
                                             <option value="">Chọn điểm đến</option>
@@ -69,13 +69,6 @@
                                                 @endif
                                             @endforeach
                                         </select>
-                                    </div>
-
-                                    <div class="col-12" style="width: auto">
-                                        <label class="form-label mt-2"></label>
-                                        <button type="submit" class="btn btn-custom w-100">
-                                            <i class="fa-solid fa-magnifying-glass"></i>&nbsp; Tìm tuyến đường
-                                        </button>
                                     </div>
                                 </div>
                             </form>                            

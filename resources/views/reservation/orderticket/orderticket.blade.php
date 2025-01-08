@@ -43,74 +43,75 @@
 
                         @include('reservation.orderticket.seat-order')
 
+                        <script src="{{ asset('assets/js/orderticket.js') }}"></script>
+
                     </div>
                 </div>
-
 
                 <div class="col-lg-12 col-md-6 bg-white p-4 rounded-5 mb-3" data-aos="fade-up" data-aos-delay="500">
 
                     @include('reservation.orderticket.form-infocustomer')
-
+                
                 </div>
-
-
+                
+                
                 <div class="col-lg-12 col-md-6 bg-white p-4 rounded-5 mb-3" data-aos="fade-up" data-aos-delay="500">
-
+                
                     @include('reservation.orderticket.info-adpoint')
-
+                
                 </div>
 
                 <div class="col-lg-6 col-md-3 bg-white p-4 rounded-5" data-aos="fade-up" data-aos-delay="500">
                     <h4 class="text-center text-uppercase">Thông tin lượt đi và giá &nbsp;<i class="bi bi-currency-exchange"></i></h4>
                     <div class="text-start col-12">
-                        <table class="table table-borderless">
-                            <tr>
-                                <td>Tuyến xe</td>
-                                <td>Sài Gòn - Cần Thơ</td>
-                            </tr>
-                            <tr>
-                                <td>Thời gian xuất bến</td>
-                                <td>09:00 12/12/2024</td>
-                            </tr>
-                            <tr>
-                                <td>Số lượng ghế</td>
-                                <td>B02</td>
-                            </tr>
-                            <tr>
-                                <td>Điểm trả khách</td>
-                                <td>Bến Xe Cần Thơ</td>
-                            </tr>
-                            <tr>
-                                <td>Hình thức di chuyển</td>
-                                <td>Một chiều</td>
-                            </tr>
-                            <tr>
-                                <td>Giá</td>
-                                <td>230.000 đồng</td>
-                            </tr>
-                            <tr>
-                                <td>Phí khác</td>
-                                <td>0 đồng</td>
-                            </tr>
-                            <tr class="fs-5 fw-bold">
-                                <td>Tổng tiền thanh toán</td>
-                                <td>230.000 đồng</td>
-                            </tr>
-                        </table>
-
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary btn-custom"><i
-                                    class="bi bi-check2-circle"></i>&nbsp;
-                                    THANH TOÁN
-                            </button>
-                        </div>
-                        
+                        <form action="" method="post">
+                            @csrf
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td>Tuyến xe</td>
+                                    <td>Sài Gòn - Cần Thơ</td>
+                                </tr>
+                                <tr>
+                                    <td>Thời gian xuất bến</td>
+                                    <td>09:00 12/12/2024</td>
+                                </tr>
+                                <tr>
+                                    <td>Số lượng ghế</td>
+                                    <td id="seatNames">{{ $seat_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Điểm trả khách</td>
+                                    <td>Bến Xe Cần Thơ</td>
+                                </tr>
+                                <tr>
+                                    <td>Hình thức di chuyển</td>
+                                    <td>Một chiều</td>
+                                </tr>
+                                <tr>
+                                    <td>Giá</td>
+                                    <td id="totalPrice">{{ number_format($total_price) }} đồng</td>
+                                </tr>
+                                <tr>
+                                    <td>Phí khác</td>
+                                    <td>0 đồng</td>
+                                </tr>
+                                <tr class="fs-5 fw-bold">
+                                    <td>Tổng tiền thanh toán</td>
+                                    <td>{{ number_format($total_price) }} đồng</td>
+                                </tr>
+                            </table>
+    
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary btn-custom border-0"><i
+                                        class="bi bi-check2-circle"></i>&nbsp;
+                                        THANH TOÁN
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
             </div>
         </section>
-
     </main>
 
     <footer id="footer" class="footer mt-0">

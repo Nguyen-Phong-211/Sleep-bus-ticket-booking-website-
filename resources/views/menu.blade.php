@@ -55,7 +55,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><a href="{{ route('admin.index') }}" id="" class="dropdown-item">Quản lý</a>
                     </ul>
                 </li>
             </ul>

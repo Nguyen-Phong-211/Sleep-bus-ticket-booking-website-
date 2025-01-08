@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('arrivalpoints', function (Blueprint $table) {
             $table->id('arrivalpoint_id')->primary();
+            $table->unsignedBigInteger('branch_id')->index();
             $table->string('arrivalpoint_name');
             $table->string('description')->nullable();
             $table->smallInteger('status');
@@ -24,6 +25,8 @@ return new class extends Migration
             
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+
+            $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
