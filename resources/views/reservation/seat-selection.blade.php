@@ -31,17 +31,14 @@
                                             {{ $seat->seat_name }}
                                         </span>
                                         <div class="form-check">
-                                            <input class="form-check-input checkbox-select-seat" 
-                                                    type="checkbox" 
-                                                    data-seat-price="{{ $route->price }}" 
-                                                    data-seat-number="{{ $seat->seat_name }}" 
-                                                    data-seatId="{{ $seat->seat_id }}"
-                                                    data-route-id="{{ $route->route_id }}"
-                                                    onchange="updateTotalPrice('{{ $route->route_id }}')" 
-                                                    value="{{ $seat->seat_name }}" 
-                                                    data-bs-toggle="tooltip" 
-                                                    data-bs-placement="top" 
-                                                    title="Click để chọn ghế ngồi">
+                                            <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                data-seat-price="{{ $route->price }}"
+                                                data-seat-number="{{ $seat->seat_name }}"
+                                                data-seatId="{{ $seat->seat_id }}"
+                                                data-route-id="{{ $route->route_id }}"
+                                                onchange="updateTotalPrice('{{ $route->route_id }}')"
+                                                value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Click để chọn ghế ngồi">
                                         </div>
                                     </li>
                                 </div>
@@ -92,17 +89,14 @@
                                                     {{ $seat->seat_name }}
                                                 </span>
                                                 <div class="form-check">
-                                                    <input class="form-check-input checkbox-select-seat" 
-                                                            type="checkbox" 
-                                                            data-seat-price="{{ $route->price }}" 
-                                                            data-seat-number="{{ $seat->seat_name }}" 
-                                                            data-seatId="{{ $seat->seat_id }}"
-                                                            data-route-id="{{ $route->route_id }}"
-                                                            onchange="updateTotalPrice('{{ $route->route_id }}')" 
-                                                            value="{{ $seat->seat_name }}" 
-                                                            data-bs-toggle="tooltip" 
-                                                            data-bs-placement="top" 
-                                                            title="Click để chọn ghế ngồi">
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                        data-seat-price="{{ $route->price }}"
+                                                        data-seat-number="{{ $seat->seat_name }}"
+                                                        data-seatId="{{ $seat->seat_id }}"
+                                                        data-route-id="{{ $route->route_id }}"
+                                                        onchange="updateTotalPrice('{{ $route->route_id }}')"
+                                                        value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                 </div>
                                             </li>
                                         </div>
@@ -150,17 +144,14 @@
                                                     {{ $seat->seat_name }}
                                                 </span>
                                                 <div class="form-check">
-                                                    <input class="form-check-input checkbox-select-seat" 
-                                                            type="checkbox" 
-                                                            data-seat-price="{{ $route->price }}" 
-                                                            data-seat-number="{{ $seat->seat_name }}" 
-                                                            data-seatId="{{ $seat->seat_id }}"
-                                                            data-route-id="{{ $route->route_id }}"
-                                                            onchange="updateTotalPrice('{{ $route->route_id }}')" 
-                                                            value="{{ $seat->seat_name }}" 
-                                                            data-bs-toggle="tooltip" 
-                                                            data-bs-placement="top" 
-                                                            title="Click để chọn ghế ngồi">
+                                                    <input class="form-check-input checkbox-select-seat" type="checkbox"
+                                                        data-seat-price="{{ $route->price }}"
+                                                        data-seat-number="{{ $seat->seat_name }}"
+                                                        data-seatId="{{ $seat->seat_id }}"
+                                                        data-route-id="{{ $route->route_id }}"
+                                                        onchange="updateTotalPrice('{{ $route->route_id }}')"
+                                                        value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                 </div>
                                             </li>
                                         </div>
@@ -212,20 +203,26 @@
             <p id="selected-seats{{ $route->route_id }}">1 vé, </p>
         </div>
         <div class="text-end col-lg-6 col-md-3">
-            <p class="fs-5 fw-bold" id="total-price{{ $route->route_id }}" data-price="{{ $route->price }}">Tổng tiền: {{ number_format($route->price) }} đồng</p>
+            <p class="fs-5 fw-bold" id="total-price{{ $route->route_id }}" data-price="{{ $route->price }}">Tổng
+                tiền: {{ number_format($route->price) }} đồng</p>
 
-            <form id="ticket-form" action="{{ route('orderticket.index', ['route' => $route->route_id]) }}" method="get" data-route-id="{{ $route->route_id }}">
-                <input type="hidden" id="selected-seats-count{{ $route->route_id }}" name="ticket" value="0">
-                <input type="hidden" id="total-price-value{{ $route->route_id }}" name="total_price" value="{{ $route->price }}">
-                <input type="hidden" id="selected-seats-name{{ $route->route_id }}" name="seat_name" value="">
-                <input type="hidden" id="select-type-vehicle" name="type_vehicle_id" value="{{ $route->type_vehicle_id }}">
+            <form id="ticket-form" action="{{ route('orderticket.index', ['route' => $route->route_id]) }}"
+                method="get" data-route-id="{{ $route->route_id }}">
+                <input type="hidden" id="selected-seats-count{{ $route->route_id }}" name="ticket"
+                    value="0">
+                <input type="hidden" id="total-price-value{{ $route->route_id }}" name="total_price"
+                    value="{{ $route->price }}">
+                <input type="hidden" id="selected-seats-name{{ $route->route_id }}" name="seat_name"
+                    value="">
+                <input type="hidden" id="select-type-vehicle" name="type_vehicle_id"
+                    value="{{ $route->type_vehicle_id }}">
                 <input type="hidden" id="selected-route" name="route" value="{{ $route->route_id }}">
 
                 <button type="submit" class="btn btn-primary btn-custom border-0">
                     <i class="bi bi-check2-circle"></i>&nbsp;Chọn vé
                 </button>
-            </form>                        
-            
+            </form>
         </div>
-    </div>    
+    </div>
 </div>
+<script src="{{ asset('assets/js/reservation.js') }}"></script>

@@ -51,29 +51,44 @@
                 <div class="col-lg-12 col-md-6 bg-white p-4 rounded-5 mb-3" data-aos="fade-up" data-aos-delay="500">
 
                     @include('reservation.orderticket.form-infocustomer')
-                
+
                 </div>
-                
-                
+
+
                 <div class="col-lg-12 col-md-6 bg-white p-4 rounded-5 mb-3" data-aos="fade-up" data-aos-delay="500">
-                
+
                     @include('reservation.orderticket.info-adpoint')
-                
+
                 </div>
 
                 <div class="col-lg-6 col-md-3 bg-white p-4 rounded-5" data-aos="fade-up" data-aos-delay="500">
-                    <h4 class="text-center text-uppercase">Thông tin lượt đi và giá &nbsp;<i class="bi bi-currency-exchange"></i></h4>
+                    <h4 class="text-center text-uppercase">Thông tin lượt đi và giá &nbsp;<i
+                            class="bi bi-currency-exchange"></i></h4>
                     <div class="text-start col-12">
-                        <form action="" method="post">
+
+                        <form action="{{ route('orderticket.confirm') }}" method="get">
                             @csrf
                             <table class="table table-borderless">
                                 <tr>
                                     <td>Tuyến xe</td>
-                                    <td>Sài Gòn - Cần Thơ</td>
+                                    <td class="fw-bold fs-5">
+                                        @foreach ($info_departures as $info_departure)
+                                            {{ $info_departure->departurepoint_name }} - 
+                                        @endforeach
+
+                                        @foreach ($info_arrivalpoints as $info_arrivalpoint)
+                                            {{ $info_arrivalpoint->arrivalpoint_name }}
+                                        @endforeach
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Thời gian xuất bến</td>
-                                    <td>09:00 12/12/2024</td>
+                                    <td>
+                                        @foreach ($info_departures as $info_departure)
+                                            {{ $info_departure->departure_time }}
+                                            {{ date('d/m/Y', strtotime($info_departure->departure_date)) }}
+                                        @endforeach
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Số lượng ghế</td>
@@ -81,33 +96,65 @@
                                 </tr>
                                 <tr>
                                     <td>Điểm trả khách</td>
-                                    <td>Bến Xe Cần Thơ</td>
+                                    <td id="arrivalPoint"></td>
                                 </tr>
                                 <tr>
                                     <td>Hình thức di chuyển</td>
-                                    <td>Một chiều</td>
+                                    <td id="travelMode">Một chiều</td>
                                 </tr>
                                 <tr>
                                     <td>Giá</td>
                                     <td id="totalPrice">{{ number_format($total_price) }} đồng</td>
                                 </tr>
                                 <tr>
-                                    <td>Phí khác</td>
-                                    <td>0 đồng</td>
+                                    <td>Phí trung chuyển</td>
+                                    <td id="otherFees">0 đồng</td>
                                 </tr>
                                 <tr class="fs-5 fw-bold">
                                     <td>Tổng tiền thanh toán</td>
-                                    <td>{{ number_format($total_price) }} đồng</td>
+                                    <td id="finalTotal">{{ number_format($total_price) }} đồng</td>
                                 </tr>
                             </table>
-    
+
+                            <input type="hidden" name="seatNames" value="">
+                            <input type="hidden" name="totalPrice" value="">
+                            <input type="hidden" name="otherFees" value="">
+                            <input type="hidden" name="finalTotal" value="">
+                            
+
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary btn-custom border-0"><i
                                         class="bi bi-check2-circle"></i>&nbsp;
-                                        THANH TOÁN
+                                    THANH TOÁN
                                 </button>
                             </div>
                         </form>
+                        <script>
+                            $(document).ready(function() {
+                                const transshipmentFee = 50000;
+
+                                function updateTotalPrice() {
+                                    let totalPrice = parseInt("{{ $total_price }}");
+                                    let otherFees = 0;
+
+                                    if ($('#trung-chuyen-2').prop('checked')) {
+                                        otherFees = transshipmentFee;
+                                    } else {
+                                        otherFees = 0;
+                                    }
+
+                                    $('#otherFees').text(otherFees.toLocaleString() + ' đồng');
+                                    let finalTotal = totalPrice + otherFees;
+                                    $('#finalTotal').text(finalTotal.toLocaleString() + ' đồng');
+                                }
+
+                                $('input[name="diem-tra"]').on('change', function() {
+                                    updateTotalPrice();
+                                });
+
+                                updateTotalPrice();
+                            });
+                        </script>
                     </div>
                 </div>
             </div>

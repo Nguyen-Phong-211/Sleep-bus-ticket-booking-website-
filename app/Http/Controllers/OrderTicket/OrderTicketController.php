@@ -5,6 +5,9 @@ namespace App\Http\Controllers\OrderTicket;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Auth;
+
 
 class OrderTicketController extends Controller
 {
@@ -34,9 +37,25 @@ class OrderTicketController extends Controller
 
         $info_departures = DB::table('departurepoints as d')
         ->join('routes as r', 'r.departurepoint_id', '=', 'd.departurepoint_id')
+        ->join('branches as b', 'd.branch_id', '=', 'b.branch_id')
         ->join('route_schedules as rs', 'rs.route_id', '=', 'r.route_id')
         ->where('r.route_id', '=', $routeId)
         ->get();
+
+        $info_arrivalpoints = DB::table('arrivalpoints as a')
+        ->join('branches as b', 'b.branch_id', '=', 'a.branch_id')
+        ->join('routes as r', 'r.arrivalpoint_id', '=', 'a.arrivalpoint_id')
+        ->join('route_details as rd', 'rd.route_id', '=', 'r.route_id')
+        ->where('r.route_id', '=', $routeId)
+        ->select(
+            'a.*', 
+            'b.branch_id',
+            'b.branch_name', 
+            'b.address', 
+            'r.route_id', 
+            'rd.*')
+        ->get();
+    
 
         return view('reservation/orderticket.orderticket',
          compact(
@@ -46,7 +65,33 @@ class OrderTicketController extends Controller
             'seat_name',
             'total_price',
             'branches',
-            'info_departures'
+            'info_departures',
+            'info_arrivalpoints',
+            )
+        );
+    }
+
+    // order ticket
+    public function confirmOrderTicket(Request $request)
+    {
+        $routeId = $request->input('route');
+
+        $user = Auth::user();
+
+        $qrData = [
+            'Họ tên' => $user->fullname,
+            'Số điện thoại' => $user->number_phone,
+            'Email' => $user->email,
+        ];
+        $qrString = json_encode($qrData);
+
+        $qrCode = QrCode::format('png')->size(200)->generate($qrString);
+
+        return view(
+            'reservation/orderticket.confirm', 
+        compact(
+                'routeId', 
+                'qrCode',
             )
         );
     }

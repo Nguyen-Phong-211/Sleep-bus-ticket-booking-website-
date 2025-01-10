@@ -14,8 +14,7 @@ return new class extends Migration
     {
         Schema::create('order_tickets', function (Blueprint $table) {
             $table->id('order_ticket_id')->primary();
-            $table->unsignedBigInteger('departurepoint_id')->index();
-            $table->unsignedBigInteger('arrivalpoint_id')->index();
+            $table->unsignedBigInteger('route_id')->index();
             $table->unsignedBigInteger('user_id')->index();
             $table->double('price');
             $table->integer('number_of_ticket');
@@ -29,8 +28,7 @@ return new class extends Migration
             $table->smallInteger('round_trip');
             $table->smallInteger('transshipment');
 
-            $table->foreign('departurepoint_id')->references('departurepoint_id')->on('departurepoints')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('arrivalpoint_id')->references('arrivalpoint_id')->on('arrivalpoints')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('type_time_id')->references('type_time_id')->on('type_times')->onDelete('cascade')->onUpdate('cascade');

@@ -39,7 +39,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6">
                         <div class="hero-content" data-aos="fade-up" data-aos-delay="200">
-                            <img src="assets/img/general/logo.png" alt="" class="img-fluid rounded-5 me-4 mb-4" width="100px" height="100px">
+                            <img src="{{ asset('assets/img/general/logo.png') }}" alt="" class="img-fluid rounded-5 me-4 mb-4" width="100px" height="100px">
                             <div class="company-badge mb-4">
                                 <i class="bi bi-gear-fill me-2"></i>
                                 Đặt vé nhanh chóng

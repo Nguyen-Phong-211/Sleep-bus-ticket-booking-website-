@@ -48,52 +48,69 @@
         </div>
         <div class="mb-3">
             <select class="form-select custom-input mb-3" id="diem-don-select" aria-label="Chọn điểm đón" onchange="updateBranchAddress()">
-                @foreach ($branches as $branch)
-                    <option value="{{ $branch->branch_id }}" data-address="{{ $branch->address }}">{{ $branch->branch_name }}</option>
+                @foreach ($info_departures as $info_departure)
+                    <option value="{{ $info_departure->branch_id }}" data-address="{{ $info_departure->address }}">{{ $info_departure->branch_name }}</option>
                 @endforeach
             </select>
             <span id="address-branch">Địa chỉ: Vui lòng chọn điểm đón</span>
-        </div>
-        <script>
-            function updateBranchAddress() {
-                const selectElement = document.getElementById("diem-don-select");
-                const selectedOption = selectElement.options[selectElement.selectedIndex];
-
-                const address = selectedOption.getAttribute("data-address");
-
-                const addressSpan = document.getElementById("address-branch");
-                addressSpan.textContent = address ? `Địa chỉ: ${address}` : "Địa chỉ: Không có địa chỉ";
-            }
-        </script>
+        </div>    
     </div>
     
     <div class="col-md-6 border-start p-3">
         <h5 class="mb-3">ĐIỂM TRẢ &nbsp;<i class="fa-solid fa-universal-access"></i></h5>
         <div class="d-flex mb-3">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="diem-tra" id="diem-tra">
-                <label class="form-check-label" for="diem-tra">
-                    Điểm trả
-                </label>
-            </div>
-            <div class="form-check ms-3">
-                <input class="form-check-input" type="radio" name="diem-tra" id="trung-chuyen-2">
-                <label class="form-check-label" for="trung-chuyen-2">
-                    Trung chuyển
-                </label>
-            </div>
+            @foreach ($info_arrivalpoints as $info_arrivalpoint)
+                @if ($info_arrivalpoint->one_way == 1 && $info_arrivalpoint->transshipment == 0)
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="diem-tra" id="diem-tra" checked>
+                        <label class="form-check-label" for="diem-tra">
+                            Điểm trả
+                        </label>
+                    </div>
+                    <div class="form-check ms-3">
+                        <input disabled class="form-check-input" type="radio" name="diem-tra" id="trung-chuyen-2">
+                        <label class="form-check-label" for="trung-chuyen-2">
+                            Trung chuyển
+                        </label>
+                    </div>
+                @elseif ($info_arrivalpoint->one_way == 1 && $info_arrivalpoint->transshipment == 1)
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="diem-tra" id="diem-tra">
+                        <label class="form-check-label" for="diem-tra">
+                            Điểm trả
+                        </label>
+                    </div>
+                    <div class="form-check ms-3">
+                        <input class="form-check-input" type="radio" name="diem-tra" id="trung-chuyen-2" checked>
+                        <label class="form-check-label" for="trung-chuyen-2">
+                            Trung chuyển
+                        </label>
+                    </div>
+                @endif
+            @endforeach
+            
         </div>
 
         <div class="mb-3">
-            <select class="form-select custom-input" id="diem-tra-select" aria-label="Chọn điểm trả">
-                <option selected>BX Miền Tây</option>
+            <select class="form-select custom-input mb-3" id="diem-tra-select" aria-label="Chọn điểm trả" onchange="getAddressArrivalpoint()">
+                @foreach ($info_arrivalpoints as $info_arrivalpoint)
+                    <option value="{{ $info_arrivalpoint->branch_id }}" data-address="{{ $info_arrivalpoint->address }}" data-name-main="{{ $info_arrivalpoint->branch_name }}">{{ $info_arrivalpoint->branch_name }}</option>
+                    <option value="{{ $info_arrivalpoint->route_detail_id }}" data-address="{{ $info_arrivalpoint->detail_address_point1 }}" data-name-main="{{ $info_arrivalpoint->point_route1 }}">{{ $info_arrivalpoint->point_route1 }}</option>
+                    <option value="{{ $info_arrivalpoint->route_detail_id }}" data-address="{{ $info_arrivalpoint->detail_address_point2 }}" data-name-main="{{ $info_arrivalpoint->point_route2 }}">{{ $info_arrivalpoint->point_route2 }}</option>
+                    <option value="{{ $info_arrivalpoint->route_detail_id }}" data-address="{{ $info_arrivalpoint->detail_address_point3 }}" data-name-main="{{ $info_arrivalpoint->point_route3 }}">{{ $info_arrivalpoint->point_route3 }}</option>
+                @endforeach
             </select>
+            <span id="address-arrivalpoint">Địa chỉ: Vui lòng chọn điểm đón</span>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col">
-        <p class="text-danger">Quý khách vui lòng có mặt tại <strong>Bến xe/Văn Phòng An Nhơn Trước 16:30 23/12/2024</strong> để được
-            trung chuyển hoặc kiểm tra thông tin trước khi lên xe.</p>
+        <p class="text-danger">Quý khách vui lòng có mặt tại 
+            <strong>
+                @foreach ($info_departures as $info_departure)
+                    {{ $info_departure->departure_time }} {{ date('d/m/Y', strtotime($info_departure->departure_date)) }}
+                @endforeach  
+            </strong> để được trung chuyển hoặc kiểm tra thông tin trước khi lên xe.</p>
     </div>
 </div>

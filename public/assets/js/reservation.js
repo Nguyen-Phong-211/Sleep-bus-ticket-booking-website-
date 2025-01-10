@@ -135,3 +135,34 @@ $(document).ready(function() {
         updateTotalPrice(routeId);
     });
 });
+
+// check checkbox before form is submitted
+document.getElementById('ticket-form').addEventListener('submit', function (e) {
+
+    e.preventDefault();
+
+
+    const checkboxes = document.querySelectorAll('.checkbox-select-seat');
+    let selectedSeats = [];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedSeats.push(checkbox.value);
+        }
+    });
+
+    if (selectedSeats.length === 0) {
+        Swal.fire({
+            position: "top-end",
+            icon: "warning",
+            title: "Vui lòng chọn ghế!",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    } else {
+        document.getElementById(`selected-seats-name${this.dataset.routeId}`).value = selectedSeats.join(',');
+        document.getElementById(`selected-seats-count${this.dataset.routeId}`).value = selectedSeats.length;
+
+        this.submit();
+    }
+});
