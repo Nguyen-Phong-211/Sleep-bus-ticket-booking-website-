@@ -74,7 +74,7 @@ class OrderTicketController extends Controller
     // order ticket
     public function confirmOrderTicket(Request $request)
     {
-        $routeId = $request->input('route');
+        $route = $request->input('route');
 
         $user = Auth::user();
 
@@ -83,14 +83,13 @@ class OrderTicketController extends Controller
             'Số điện thoại' => $user->number_phone,
             'Email' => $user->email,
         ];
-        $qrString = json_encode($qrData);
+        $qrString = "Họ tên: {$user->fullname}\nSố điện thoại: {$user->number_phone}\nEmail: {$user->email}";
 
-        $qrCode = QrCode::format('png')->size(200)->generate($qrString);
+        $qrCode = QrCode::format('png')->encoding('UTF-8')->size(200)->generate($qrString);
 
         return view(
             'reservation/orderticket.confirm', 
         compact(
-                'routeId', 
                 'qrCode',
             )
         );

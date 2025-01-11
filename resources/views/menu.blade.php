@@ -36,6 +36,12 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('setting.index') }}" class="dropdown-item">Cài đặt tài khoản</a></li>
+                        <li>
+                            <a href="{{ route('admin.index') }}" class="dropdown-item d-flex justify-content-sm-start m-0" target="_blank">
+                                <span>Quản trị</span>
+                            </a>
+                        </li>
+                                             
                         <li><a href="{{ route('logout.logout') }}" id="logoutLink" class="dropdown-item">Đăng xuất</a>
                         </li>
                         <li class="dropdown"><a href="#"><span>Ngôn ngữ</span> <i

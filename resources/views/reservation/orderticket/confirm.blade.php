@@ -23,6 +23,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-9 col-xl-8 col-xxl-7" id="invoice">
+
                         <form action="" method="" id="convert-image-invoice">
                             <div class="row gy-3 mb-3">
                                 <div class="row mb-4">
@@ -51,7 +52,7 @@
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex justify-content-center">
-                                        <img src="data:image/png;base64,{{ base64_encode($qrCode) }}" alt="QR Code"
+                                        <img name="img-qrcode" src="data:image/png;base64,{{ base64_encode($qrCode) }}" alt="QR Code"
                                             class="img-fluid" style="max-width: 180px; height: auto;">
                                     </div>
                                 </div>
@@ -136,6 +137,8 @@
                                 </div>
                             </div>
                         </form>
+
+                        
                         <a id="downloadLink" style="display:none"></a>
 
                         <script>

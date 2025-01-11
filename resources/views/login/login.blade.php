@@ -67,8 +67,13 @@
                                         <i class="fa-solid fa-key position-absolute top-50 start-0 translate-middle-y ps-4"></i>
                                     </div>
 
-                                    <div class="col-md-12 fs-6 fw-bold text-start">
-                                        <a href="{{ route('misspassword.index') }}"><i class="fa-solid fa-id-card"></i>&nbsp; Quên mật khẩu</a>
+                                    <div class="col-md-12 fs-6 text-start">
+                                        <p>
+                                            <a href="{{ route('misspassword.index') }}"><i class="fa-solid fa-id-card"></i>&nbsp; Quên mật khẩu</a>
+                                        </p>
+                                        <p>
+                                            Chưa có tài khoản. Vui lòng đăng ký &nbsp;<a href="{{ route('signup.index') }}"><i class="fa-solid fa-user-plus"></i>&nbsp; tại đây</a>
+                                        </p>
                                     </div>
 
                                     <div class="col-12 text-center">

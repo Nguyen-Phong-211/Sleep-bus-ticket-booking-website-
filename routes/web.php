@@ -28,7 +28,7 @@ Route::controller(HomeController::class)->group(function(){
 
 // login
 Route::prefix('login')->group(function () {
-    Route::get('/', [LoginController::class, 'index'])->name('login.index');
+    Route::get('/', [LoginController::class, 'index'])->name('login');
     Route::post('/authu', [LoginController::class, 'login'])->name('login.post');  
 });
 
@@ -46,7 +46,6 @@ Route::prefix('clause')->group(function () {
 //schedule
 Route::prefix('schedule')->group(function () {
     Route::get('/', [ScheduleController::class, 'index'])->name('schedule.index'); 
-    // Route::post('/findroute', [ScheduleController::class, 'getRoutes'])->name('schedule.getRoutes'); 
 });
 
 //consultation
@@ -61,7 +60,7 @@ Route::prefix('contact')->group(function () {
 });
 
 //otp
-Route::prefix('authu')->group(function () {
+Route::prefix('authu')->middleware(['auth'])->group(function () {
     Route::get('/', [OtpController::class, 'index'])->name('authu.index');
     Route::get('misspassword', [OtpController::class, 'showViewMisspassword'])->name('authu.showViewMisspassword');
     Route::post('misspassword', [UserController::class, 'forgotPassword'])->name('authu.forgotPassword');
@@ -96,7 +95,7 @@ Route::prefix('logout')->group(function () {
 });
 
 //user
-Route::prefix('user')->group(function () {
+Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
     Route::get('/misspassword', [UserController::class, 'showViewforgotPassword'])->name('misspassword.index');
     Route::post('/update', [UserController::class, 'updateInformation'])->name('user.update');
@@ -104,18 +103,18 @@ Route::prefix('user')->group(function () {
 });
 
 //setting
-Route::prefix('setting')->group(function () {
+Route::prefix('setting')->middleware(['auth'])->group(function () {
     Route::get('/', [SettingController::class, 'index'])->name('setting.index');
 });
 
 //order-ticket
-Route::prefix('reservation/orderticket')->group(function () {
+Route::prefix('reservation/orderticket')->middleware(['auth'])->group(function () {
     Route::get('/', [OrderTicketController::class, 'index'])->name('orderticket.index');
     Route::get('/confirm', [OrderTicketController::class, 'confirmOrderTicket'])->name('orderticket.confirm');
 });
 
 //otp
-Route::post('authu/otp/verify', [OtpController::class,'verifyOtp'])->name('otp.verify');
+Route::post('authu/otp/verify', [OtpController::class,'verifyOtp'])->name('otp.verify')->middleware(['auth']);
 
 //language
 Route::prefix('lang')->group(function () {
@@ -133,21 +132,21 @@ use App\Http\Controllers\Admin\Vehicle\ManagementTypeVehicleController;
 
 
 //Admin
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/dashbroad', [DashbroadController::class, 'index'])->name('admin.index');
 });
 
 // Logout
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/logout', [AdminLogoutController::class, 'logout'])->name('admin.logout');
 });
 
 // Vehicle
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/vehicle', [ManagementVehicleController::class, 'index'])->name('admin.vehicle');
 });
 
 // TypeVehicle
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/typevehicle', [ManagementTypeVehicleController::class, 'index'])->name('admin.typevehicle');
 });

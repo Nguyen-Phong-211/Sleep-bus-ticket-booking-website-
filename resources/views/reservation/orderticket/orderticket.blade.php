@@ -79,6 +79,7 @@
                                         @foreach ($info_arrivalpoints as $info_arrivalpoint)
                                             {{ $info_arrivalpoint->arrivalpoint_name }}
                                         @endforeach
+                                        <input type="hidden" name="route" value="{{ $route }}">
                                     </td>
                                 </tr>
                                 <tr>
@@ -93,6 +94,7 @@
                                 <tr>
                                     <td>Số lượng ghế</td>
                                     <td id="seatNames">{{ $seat_name }}</td>
+                                    <input type="hidden" name="seatName" value="{{ $seat_name }}">
                                 </tr>
                                 <tr>
                                     <td>Điểm trả khách</td>
@@ -115,12 +117,6 @@
                                     <td id="finalTotal">{{ number_format($total_price) }} đồng</td>
                                 </tr>
                             </table>
-
-                            <input type="hidden" name="seatNames" value="">
-                            <input type="hidden" name="totalPrice" value="">
-                            <input type="hidden" name="otherFees" value="">
-                            <input type="hidden" name="finalTotal" value="">
-                            
 
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary btn-custom border-0"><i

@@ -281,4 +281,3 @@ document.querySelectorAll('input[name="deliveryType"]').forEach(radio => {
       }
   });
 });
-

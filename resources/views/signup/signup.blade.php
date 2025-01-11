@@ -12,6 +12,7 @@
 </head>
 
 <body class="index-page">
+    @include('loading')
 
     @if (session('error'))
         <script>
@@ -45,7 +46,7 @@
                                     height="150px" width="150px">
                             </div>
                             <h3>ĐĂNG KÝ TÀI KHOẢN</h3>
-                            <p>Bạn đã có tài khoản. Hãy <a href="{{ route('login.index') }}"><i
+                            <p>Bạn đã có tài khoản. Hãy <a href="{{ route('login') }}"><i
                                         class="fa-solid fa-arrow-right"></i>&nbsp; Đăng nhập</a></p>
 
                             <form action="{{ route('signup.store') }}" method="post" class="mt-4" data-aos="fade-up"
