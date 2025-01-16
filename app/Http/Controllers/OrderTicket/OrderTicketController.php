@@ -55,6 +55,10 @@ class OrderTicketController extends Controller
             'r.route_id', 
             'rd.*')
         ->get();
+
+        function urlEncodeWithPlus($string) {
+            return str_replace(' ', '+', $string);
+        }        
     
 
         return view('reservation/orderticket.orderticket',
@@ -74,16 +78,21 @@ class OrderTicketController extends Controller
     // order ticket
     public function confirmOrderTicket(Request $request)
     {
-        $route = $request->input('route');
-
+        $departurepoint_name = $request->input('departurepoint_name');
+        $arrivalpoint_name = $request->input('arrivalpoint_name');
         $user = Auth::user();
+        $date_departure = $request->input('date_departure');
+        $arrivalPoint = $request->input('arrivalPoint');
+        $travelMode = $request->input('travelMode');
 
         $qrData = [
             'Họ tên' => $user->fullname,
             'Số điện thoại' => $user->number_phone,
             'Email' => $user->email,
+            'Điểm đi' => $departurepoint_name,
+            'Điểm đến' => $arrivalpoint_name
         ];
-        $qrString = "Họ tên: {$user->fullname}\nSố điện thoại: {$user->number_phone}\nEmail: {$user->email}";
+        $qrString = "Họ tên: {$user->fullname}\nSố điện thoại: {$user->number_phone}\nEmail: {$user->email}\nĐiểm đi: {$departurepoint_name}\nĐiểm đến: {$arrivalpoint_name}";
 
         $qrCode = QrCode::format('png')->encoding('UTF-8')->size(200)->generate($qrString);
 
@@ -91,6 +100,11 @@ class OrderTicketController extends Controller
             'reservation/orderticket.confirm', 
         compact(
                 'qrCode',
+                'departurepoint_name',
+                'arrivalpoint_name',
+                'date_departure',
+                'arrivalPoint',
+                'travelMode',
             )
         );
     }

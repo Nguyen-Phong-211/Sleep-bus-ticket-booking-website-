@@ -25,6 +25,7 @@
                     <div class="col-12 col-lg-9 col-xl-8 col-xxl-7" id="invoice">
 
                         <form action="" method="" id="convert-image-invoice">
+                            @csrf
                             <div class="row gy-3 mb-3">
                                 <div class="row mb-4">
                                     <div class="col-12 text-center mt-3">
@@ -60,21 +61,33 @@
 
                             <div class="row mb-3">
                                 <div class="col-12 col-sm-6 col-md-8">
-                                    <h4>Thông tin chuyến xe <strong>Sài Gòn - Cà Mau</strong></h4>
+                                    <h4>Thông tin chuyến xe <strong>{{ $departurepoint_name }} - {{ $arrivalpoint_name }}</strong></h4>
                                     <div class="row">
                                         <span class="col-6">Nơi đi</span>
-                                        <span class="col-6 text-sm-start">{{ Auth::user()->user_code }}</span>
+                                        <span class="col-6 text-sm-start">{{ $departurepoint_name }}</span>
                                         <span class="col-6">Nơi đến</span>
-                                        <span class="col-6 text-sm-start">{{ rand(1000000000, 9999999999) }}</span>
-                                        <span class="col-6">Giờ khởi hành</span>
+                                        <span class="col-6 text-sm-start">{{ $arrivalpoint_name }}</span>
+                                        <span class="col-6">Điểm trả khách</span>
+                                        <span class="col-6 text-sm-start">{{ $arrivalPoint }}</span>
+                                        <span class="col-6">Ngày và giờ khởi hành</span>
                                         <span
-                                            class="col-6 text-sm-start">{{ \Carbon\Carbon::now()->format('d/m/Y H:i:s') }}</span>
+                                            class="col-6 text-sm-start">{{ $date_departure }}</span>
                                         <span class="col-6">Ngày khởi hàng</span>
                                         <span class="col-6 text-sm-start">{{ rand(1000000000, 9999999999) }}</span>
+                                        
+                                        @if ($travelMode == 1)
                                         <span class="col-6">Khứ hồi</span>
                                         <span class="col-6 text-sm-start">Có</span>
+
                                         <span class="col-6">Trung chuyển</span>
                                         <span class="col-6 text-sm-start">Có</span>
+                                        @else
+                                            <span class="col-6">Khứ hồi</span>
+                                            <span class="col-6 text-sm-start">Không</span>
+
+                                            <span class="col-6">Trung chuyển</span>
+                                            <span class="col-6 text-sm-start">Không</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-4">

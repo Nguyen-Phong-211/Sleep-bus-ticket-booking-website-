@@ -206,8 +206,17 @@
             <p class="fs-5 fw-bold" id="total-price{{ $route->route_id }}" data-price="{{ $route->price }}">Tổng
                 tiền: {{ number_format($route->price) }} đồng</p>
 
-            <form id="ticket-form" action="{{ route('orderticket.index', ['route' => $route->route_id]) }}"
-                method="get" data-route-id="{{ $route->route_id }}">
+            <form id="ticket-form" method="post" data-route-id="{{ $route->route_id }}" 
+                action="{{ route('orderticket.index', 
+                ['route' => $route->route_id, 
+                'routename' => $route->departurepoint_name . $route->arrivalpoint_name,
+                'vehiclename' => $route->type_vehicle_name,
+                'departuredate' => \Carbon\Carbon::parse($route->departure_date)->format('d-m-Y'),
+                'departuretime' => \Carbon\Carbon::parse($route->departure_time)->format('H') ]) }}">
+                @csrf
+                @method('post')
+
+                <input type="hidden" name="route" value="{{ $route->route_id }}">
                 <input type="hidden" id="selected-seats-count{{ $route->route_id }}" name="ticket"
                     value="0">
                 <input type="hidden" id="total-price-value{{ $route->route_id }}" name="total_price"
@@ -218,10 +227,14 @@
                     value="{{ $route->type_vehicle_id }}">
                 <input type="hidden" id="selected-route" name="route" value="{{ $route->route_id }}">
 
+                <input type="hidden" id="selected-route-name" name="route_name"
+                    value="{{ $route->departurepoint_name . $route->arrivalpoint_name }}">
+
                 <button type="submit" class="btn btn-primary btn-custom border-0">
                     <i class="bi bi-check2-circle"></i>&nbsp;Chọn vé
                 </button>
             </form>
+
         </div>
     </div>
 </div>

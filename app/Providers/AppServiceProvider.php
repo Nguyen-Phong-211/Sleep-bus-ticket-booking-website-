@@ -13,6 +13,7 @@ use App\Models\Floor;
 use App\Models\RowSeat;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {

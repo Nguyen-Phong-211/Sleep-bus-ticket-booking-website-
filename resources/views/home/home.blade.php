@@ -12,7 +12,6 @@
 </head>
 
 <body class="index-page">
-    @include('loading')
 
     @if (session('success_message' ))
         <script>

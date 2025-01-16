@@ -66,7 +66,7 @@
                             class="bi bi-currency-exchange"></i></h4>
                     <div class="text-start col-12">
 
-                        <form action="{{ route('orderticket.confirm') }}" method="get">
+                        <form action="{{ route('orderticket.confirm', ['redirect' => 'invoice', 'qrcode' => '1']) }}" method="post">
                             @csrf
                             <table class="table table-borderless">
                                 <tr>
@@ -74,12 +74,13 @@
                                     <td class="fw-bold fs-5">
                                         @foreach ($info_departures as $info_departure)
                                             {{ $info_departure->departurepoint_name }} - 
+                                            <input type="hidden" name="departurepoint_name" value="{{ $info_departure->departurepoint_name }}">
                                         @endforeach
 
                                         @foreach ($info_arrivalpoints as $info_arrivalpoint)
                                             {{ $info_arrivalpoint->arrivalpoint_name }}
+                                            <input type="hidden" name="arrivalpoint_name" value="{{ $info_arrivalpoint->arrivalpoint_name }}">
                                         @endforeach
-                                        <input type="hidden" name="route" value="{{ $route }}">
                                     </td>
                                 </tr>
                                 <tr>
@@ -88,6 +89,7 @@
                                         @foreach ($info_departures as $info_departure)
                                             {{ $info_departure->departure_time }}
                                             {{ date('d/m/Y', strtotime($info_departure->departure_date)) }}
+                                            <input type="hidden" name="date_departure" value="{{ date('d/m/Y', strtotime($info_departure->departure_date)) }}">
                                         @endforeach
                                     </td>
                                 </tr>
@@ -99,10 +101,42 @@
                                 <tr>
                                     <td>Điểm trả khách</td>
                                     <td id="arrivalPoint"></td>
+                                    <input type="hidden" name="arrivalPoint" value="">
+
+                                    <script>
+                                        const arrivalPointElement = document.getElementById('arrivalPoint');
+                                    
+                                        const observer = new MutationObserver((mutations) => {
+                                            mutations.forEach((mutation) => {
+                                                if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                                                    const newValue = arrivalPointElement.textContent.trim();
+                                                    document.querySelector('input[name="arrivalPoint"]').value = newValue;
+                                                }
+                                            });
+                                        });
+                                    
+                                        observer.observe(arrivalPointElement, { childList: true, subtree: true, characterData: true });
+                                    </script>
                                 </tr>
                                 <tr>
                                     <td>Hình thức di chuyển</td>
                                     <td id="travelMode">Một chiều</td>
+                                    <input type="hidden" name="travelMode" value="">
+
+                                    <script>
+                                        const travelModeElement = document.getElementById('travelMode');
+                                    
+                                        const observer = new MutationObserver((mutations) => {
+                                            mutations.forEach((mutation) => {
+                                                if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                                                    const newValue = travelModeElement.textContent.trim();
+                                                    document.querySelector('input[name="travelMode"]').value = newValue;
+                                                }
+                                            });
+                                        });
+                                    
+                                        observer.observe(travelModeElement, { childList: true, subtree: true, characterData: true });
+                                    </script>
                                 </tr>
                                 <tr>
                                     <td>Giá</td>
@@ -111,6 +145,7 @@
                                 <tr>
                                     <td>Phí trung chuyển</td>
                                     <td id="otherFees">0 đồng</td>
+                                    <input type="hidden" name="otherFees" value="">
                                 </tr>
                                 <tr class="fs-5 fw-bold">
                                     <td>Tổng tiền thanh toán</td>
