@@ -84,6 +84,32 @@ class OrderTicketController extends Controller
         $date_departure = $request->input('date_departure');
         $arrivalPoint = $request->input('arrivalPoint');
         $travelMode = $request->input('travelMode');
+        $finalTotal = $request->input('finalTotal');
+        $otherFees = $request->input('otherFees');
+        $totalPrice = $request->input('totalPrice');
+        $time_departure = $request->input('time_departure');
+        $type_vehicle_id = $request->input('type_vehicle_id');
+        $route = $request->input('route');
+
+        $seatName = $request->input('seatName');
+        $seatNames = explode(',', $seatName);
+
+        $getInfoSeat = DB::table('seats as s')
+        ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
+        ->join('vehicles as v', 'tv.type_vehicle_id', '=', 'v.type_vehicle_id')
+        ->join('row_seats as rs', 's.row_seat_id', '=', 'rs.row_seat_id')
+        ->join('routes as r', 's.type_vehicle_id', '=', 'r.type_vehicle_id')
+        ->join('floors as f', 'f.floor_id', '=', 's.floor_id')
+        ->whereIn('s.seat_name', $seatNames)
+        ->where('s.type_vehicle_id', '=', $type_vehicle_id)
+        ->select('s.seat_name', 'tv.type_vehicle_name', 'rs.row_seat_name', 'f.floor_name', 'v.license_plate', 'r.price')
+        ->get();
+
+        $uniqueLicensePlates = $getInfoSeat->pluck('license_plate')->unique();
+
+        $getAllSeat = DB::table('seats')
+        ->where('seat_name', '=', $seatName)
+        ->get();
 
         $qrData = [
             'Họ tên' => $user->fullname,
@@ -105,7 +131,28 @@ class OrderTicketController extends Controller
                 'date_departure',
                 'arrivalPoint',
                 'travelMode',
+                'finalTotal',
+                'otherFees',
+                'seatName',
+                'totalPrice',
+                'getAllSeat',
+                'time_departure',
+                'getInfoSeat',
+                'uniqueLicensePlates'
             )
         );
+    }
+
+    public function storage (Request $request)
+    {
+        $route = $request->input('route');
+        $userId = Auth::user()->user_id;
+        $price = DB::table('routes')
+        ->where('route_id', '=', $route)
+        ->select('price')
+        ->first();
+
+        sleep(2);
+        return view('reservation.orderticket.success');
     }
 }

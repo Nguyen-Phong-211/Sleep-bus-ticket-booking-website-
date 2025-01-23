@@ -210,9 +210,7 @@
                 action="{{ route('orderticket.index', 
                 ['route' => $route->route_id, 
                 'routename' => $route->departurepoint_name . $route->arrivalpoint_name,
-                'vehiclename' => $route->type_vehicle_name,
-                'departuredate' => \Carbon\Carbon::parse($route->departure_date)->format('d-m-Y'),
-                'departuretime' => \Carbon\Carbon::parse($route->departure_time)->format('H') ]) }}">
+                'vehiclename' => $route->type_vehicle_name ]) }}">
                 @csrf
                 @method('post')
 

@@ -12,6 +12,7 @@
 </head>
 
 <body class="index-page">
+    @include('loading')
 
     <header id="header" class="header d-flex align-items-center fixed-top">
         @include('menu')

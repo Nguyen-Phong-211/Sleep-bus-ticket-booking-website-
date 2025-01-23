@@ -1,12 +1,13 @@
-<div
-    class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+<div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
     <a href="{{ route('home.index') }}" class="logo d-flex align-items-center me-auto me-xl-0">
         <h1 class="sitename">VeXe247.com</h1>
     </a>
 
     <nav id="navmenu" class="navmenu">
         <ul class="d-flex align-items-center w-100">
-            <li class="text-uppercase"><a href="{{ route('home.index') }}" class="fw-bold">Trang chủ</a></li>
+            <li class="text-uppercase">
+                <a href="{{ route('home.index') }}" class="fw-bold">Trang chủ</a>
+            </li>
             <li class="text-uppercase"><a href="{{ route('schedule.index') }}" class="fw-bold">Lịch trình</a></li>
             <li class="dropdown text-uppercase">
                 <a href="#"><span class="fw-bold">DỊCH VỤ</span> <i

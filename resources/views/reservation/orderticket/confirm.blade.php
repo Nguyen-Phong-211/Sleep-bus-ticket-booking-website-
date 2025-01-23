@@ -24,8 +24,9 @@
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-9 col-xl-8 col-xxl-7" id="invoice">
 
-                        <form action="" method="" id="convert-image-invoice">
+                        <form action="{{ route('orderticket.storage') }}" method="post" id="convert-image-invoice">
                             @csrf
+                            @method('post')
                             <div class="row gy-3 mb-3">
                                 <div class="row mb-4">
                                     <div class="col-12 text-center mt-3">
@@ -65,22 +66,31 @@
                                     <div class="row">
                                         <span class="col-6">Nơi đi</span>
                                         <span class="col-6 text-sm-start">{{ $departurepoint_name }}</span>
+
                                         <span class="col-6">Nơi đến</span>
                                         <span class="col-6 text-sm-start">{{ $arrivalpoint_name }}</span>
+
                                         <span class="col-6">Điểm trả khách</span>
                                         <span class="col-6 text-sm-start">{{ $arrivalPoint }}</span>
-                                        <span class="col-6">Ngày và giờ khởi hành</span>
-                                        <span
-                                            class="col-6 text-sm-start">{{ $date_departure }}</span>
-                                        <span class="col-6">Ngày khởi hàng</span>
-                                        <span class="col-6 text-sm-start">{{ rand(1000000000, 9999999999) }}</span>
+
+                                        <span class="col-6">Biển số xe</span>
+                                        @foreach ($uniqueLicensePlates as $licensePlate)
+                                            <span class="col-6 text-sm-start">{{ $licensePlate }}</span>
+                                        @endforeach
+
+
+                                        <span class="col-6">Ngày khởi hành</span>
+                                        <span class="col-6 text-sm-start">{{ $date_departure }}</span>
+
+                                        <span class="col-6">Giờ khởi hàng</span>
+                                        <span class="col-6 text-sm-start">{{ $time_departure }}</span>
                                         
                                         @if ($travelMode == 1)
-                                        <span class="col-6">Khứ hồi</span>
-                                        <span class="col-6 text-sm-start">Có</span>
+                                            <span class="col-6">Khứ hồi</span>
+                                            <span class="col-6 text-sm-start">Không</span>
 
-                                        <span class="col-6">Trung chuyển</span>
-                                        <span class="col-6 text-sm-start">Có</span>
+                                            <span class="col-6">Trung chuyển</span>
+                                            <span class="col-6 text-sm-start">Có</span>
                                         @else
                                             <span class="col-6">Khứ hồi</span>
                                             <span class="col-6 text-sm-start">Không</span>
@@ -112,30 +122,49 @@
                             <div class="row mb-3">
                                 <div class="col-12">
                                     <div class="table-responsive">
-                                        <table class="table table-borderless">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th scope="col" class="text-uppercase">STT</th>
                                                     <th scope="col" class="text-uppercase">Ghế</th>
-                                                    <th scope="col" class="text-uppercase text-end">Giá</th>
-                                                    <th scope="col" class="text-uppercase text-end">Phí trung chuyển
-                                                    </th>
+                                                    <th scope="col" class="text-uppercase">Tầng</th>
+                                                    <th scope="col" class="text-uppercase">Hàng</th>
+                                                    <th scope="col" class="text-uppercase">Loại xe</th>
+                                                    <th scope="col" class="text-uppercase">Giá</th>
+                                                    <th scope="col" class="text-uppercase">Thành tiền</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="table-group-divider">
+                                                @foreach ($getInfoSeat as $index => $seat)
+                                                    <tr>
+                                                        <th scope="row">{{ $index + 1 }}</th>
+                                                        <td>{{ $seat->seat_name }}</td>
+                                                        <td>{{ $seat->floor_name }}</td>
+                                                        <td>{{ $seat->row_seat_name }}</td>
+                                                        <td>{{ $seat->type_vehicle_name }}</td>
+                                                        <td>{{ number_format($seat->price) }}</td>
+                        
+                                                        @if ((int)$otherFees != 0)
+                                                            <td>{{ number_format($seat->price + 50000) }}</td>
+                                                        @else
+                                                            <td>{{ number_format($seat->price + 0) }}</td>
+                                                        @endif
+                                                    </tr>
+                                                @endforeach
                                                 <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>A1, A2</td>
-                                                    <td class="text-end">290.000</td>
-                                                    <td class="text-end">50.000</td>
+                                                    <th scope="row" colspan="6" class="text-uppercase text-end">Phí trung chuyển</th>
+                                                    @if ((int)$otherFees != 0 )
+                                                        <td class="text-end fs-5 fw-bold">{{ number_format(50000) }}</td>
+                                                    @else
+                                                        <td class="text-end fs-5 fw-bold">0</td>
+                                                    @endif
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" colspan="3" class="text-uppercase text-end">
-                                                        Total</th>
-                                                    <td class="text-end fs-5 fw-bold">$495.1</td>
+                                                    <th scope="row" colspan="6" class="text-uppercase text-end">Tổng tiền</th>
+                                                    <td class="text-end fs-5 fw-bold">{{ $finalTotal }}</td>
                                                 </tr>
                                             </tbody>
-                                        </table>
+                                        </table>                                        
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +175,7 @@
                                 <div class="col-12 text-end">
                                     <button type="submit" class="btn btn-primary mb-3 btn-custom border-0"
                                         id="downloadInvoiceBtn" onclick="downloadInvoice()"><i
-                                            class="fa-solid fa-thumbs-up"></i>Xác nhận và tải hoá đơn</button>
+                                            class="fa-solid fa-thumbs-up"></i>&nbsp;Xác nhận và tải hoá đơn</button>
                                 </div>
                             </div>
                         </form>

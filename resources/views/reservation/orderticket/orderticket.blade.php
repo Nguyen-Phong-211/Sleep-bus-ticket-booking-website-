@@ -66,7 +66,7 @@
                             class="bi bi-currency-exchange"></i></h4>
                     <div class="text-start col-12">
 
-                        <form action="{{ route('orderticket.confirm', ['redirect' => 'invoice', 'qrcode' => '1']) }}" method="post">
+                        <form action="{{ route('orderticket.confirm', ['redirect' => 'invoice']) }}" method="post">
                             @csrf
                             <table class="table table-borderless">
                                 <tr>
@@ -81,6 +81,7 @@
                                             {{ $info_arrivalpoint->arrivalpoint_name }}
                                             <input type="hidden" name="arrivalpoint_name" value="{{ $info_arrivalpoint->arrivalpoint_name }}">
                                         @endforeach
+                                        <input type="hidden" name="type_vehicle_id" value="{{ $type_vehicle_id }}">
                                     </td>
                                 </tr>
                                 <tr>
@@ -90,6 +91,7 @@
                                             {{ $info_departure->departure_time }}
                                             {{ date('d/m/Y', strtotime($info_departure->departure_date)) }}
                                             <input type="hidden" name="date_departure" value="{{ date('d/m/Y', strtotime($info_departure->departure_date)) }}">
+                                            <input type="hidden" name="time_departure" value="{{ $info_departure->departure_time }}">
                                         @endforeach
                                     </td>
                                 </tr>
@@ -141,15 +143,53 @@
                                 <tr>
                                     <td>Giá</td>
                                     <td id="totalPrice">{{ number_format($total_price) }} đồng</td>
+                                    <input type="hidden" name="totalPrice" value="{{ $total_price }}">
                                 </tr>
                                 <tr>
                                     <td>Phí trung chuyển</td>
                                     <td id="otherFees">0 đồng</td>
-                                    <input type="hidden" name="otherFees" value="">
+                                    <input type="hidden" name="otherFees" value="" id="otherFeesInput">
+                                    <script>
+                                        const otherFeesElement = document.getElementById('otherFees');
+                                        const otherFeesInput = document.getElementById('otherFeesInput');
+                                
+                                        if (otherFeesElement && otherFeesInput) {
+                                            const observer = new MutationObserver((mutations) => {
+                                                mutations.forEach((mutation) => {
+                                                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
+
+                                                        const newValue = otherFeesElement.textContent.trim();
+                                                        otherFeesInput.value = newValue;
+                                                    }
+                                                });
+                                            });
+                                
+                                            observer.observe(otherFeesElement, { childList: true, subtree: true, characterData: true });
+                                        }
+                                    </script>
                                 </tr>
                                 <tr class="fs-5 fw-bold">
                                     <td>Tổng tiền thanh toán</td>
                                     <td id="finalTotal">{{ number_format($total_price) }} đồng</td>
+                                    <input type="hidden" name="finalTotal" id="finalTotalInput" value="">
+                                    <script>
+                                        const finalTotalElement = document.getElementById('finalTotal');
+                                        const finalTotalInput = document.getElementById('finalTotalInput');
+                                
+                                        if (finalTotalElement && finalTotalInput) {
+                                            const observer = new MutationObserver((mutations) => {
+                                                mutations.forEach((mutation) => {
+                                                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
+
+                                                        const newValue = finalTotalElement.textContent.trim();
+                                                        finalTotalInput.value = newValue;
+                                                    }
+                                                });
+                                            });
+                                
+                                            observer.observe(finalTotalElement, { childList: true, subtree: true, characterData: true });
+                                        }
+                                    </script>
                                 </tr>
                             </table>
 

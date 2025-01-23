@@ -111,6 +111,7 @@ Route::prefix('setting')->middleware(['auth'])->group(function () {
 Route::prefix('reservation/orderticket')->middleware(['auth'])->group(function () {
     Route::post('/', [OrderTicketController::class, 'index'])->name('orderticket.index');
     Route::post('/confirm', [OrderTicketController::class, 'confirmOrderTicket'])->name('orderticket.confirm');
+    Route::post('/storage', [OrderTicketController::class, 'storage'])->name('orderticket.storage');
 });
 
 //otp
