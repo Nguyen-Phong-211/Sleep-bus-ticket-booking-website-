@@ -24,7 +24,7 @@
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-9 col-xl-8 col-xxl-7" id="invoice">
 
-                        <form action="{{ route('orderticket.storage') }}" method="post" id="convert-image-invoice">
+                        <form action="{{ route('orderticket.storage') }}" method="post" id="convert-image-invoice" enctype="multipart/form-data">
                             @csrf
                             @method('post')
                             <div class="row gy-3 mb-3">
@@ -56,6 +56,7 @@
                                     <div class="col-6 d-flex justify-content-center">
                                         <img name="img-qrcode" src="data:image/png;base64,{{ base64_encode($qrCode) }}" alt="QR Code"
                                             class="img-fluid" style="max-width: 180px; height: auto;">
+                                            <input type="hidden" name="img-qrcode" value="data:image/png;base64,{{ base64_encode($qrCode) }}">
                                     </div>
                                 </div>
                             </div>
@@ -69,6 +70,7 @@
 
                                         <span class="col-6">Nơi đến</span>
                                         <span class="col-6 text-sm-start">{{ $arrivalpoint_name }}</span>
+                                        <input type="hidden" name="route" value="{{ $route }}">
 
                                         <span class="col-6">Điểm trả khách</span>
                                         <span class="col-6 text-sm-start">{{ $arrivalPoint }}</span>
@@ -76,6 +78,7 @@
                                         <span class="col-6">Biển số xe</span>
                                         @foreach ($uniqueLicensePlates as $licensePlate)
                                             <span class="col-6 text-sm-start">{{ $licensePlate }}</span>
+                                            <input type="hidden" name="licensePlates" value="{{ $licensePlate }}">
                                         @endforeach
 
 
@@ -85,18 +88,20 @@
                                         <span class="col-6">Giờ khởi hàng</span>
                                         <span class="col-6 text-sm-start">{{ $time_departure }}</span>
                                         
-                                        @if ($travelMode == 1)
+                                        @if ($travelMode === "Trung chuyển")
                                             <span class="col-6">Khứ hồi</span>
                                             <span class="col-6 text-sm-start">Không</span>
 
                                             <span class="col-6">Trung chuyển</span>
                                             <span class="col-6 text-sm-start">Có</span>
+                                            <input type="hidden" name="travelMode" value="1">
                                         @else
                                             <span class="col-6">Khứ hồi</span>
                                             <span class="col-6 text-sm-start">Không</span>
 
                                             <span class="col-6">Trung chuyển</span>
                                             <span class="col-6 text-sm-start">Không</span>
+                                            <input type="hidden" name="travelMode" value="0">
                                         @endif
                                     </div>
                                 </div>
@@ -138,13 +143,17 @@
                                                 @foreach ($getInfoSeat as $index => $seat)
                                                     <tr>
                                                         <th scope="row">{{ $index + 1 }}</th>
-                                                        <td>{{ $seat->seat_name }}</td>
+                                                        <td>
+                                                            {{ $seat->seat_name }}
+                                                            <input type="hidden" name="seatName" value="{{ $seatName }}">
+                                                        </td>
+
                                                         <td>{{ $seat->floor_name }}</td>
                                                         <td>{{ $seat->row_seat_name }}</td>
                                                         <td>{{ $seat->type_vehicle_name }}</td>
                                                         <td>{{ number_format($seat->price) }}</td>
-                        
-                                                        @if ((int)$otherFees != 0)
+
+                                                        @if ((int) $otherFees != 0)
                                                             <td>{{ number_format($seat->price + 50000) }}</td>
                                                         @else
                                                             <td>{{ number_format($seat->price + 0) }}</td>
@@ -153,10 +162,12 @@
                                                 @endforeach
                                                 <tr>
                                                     <th scope="row" colspan="6" class="text-uppercase text-end">Phí trung chuyển</th>
-                                                    @if ((int)$otherFees != 0 )
+                                                    @if ((int) $otherFees != 0)
                                                         <td class="text-end fs-5 fw-bold">{{ number_format(50000) }}</td>
+                                                        <input type="hidden" name="dif_cost" value="50000">
                                                     @else
                                                         <td class="text-end fs-5 fw-bold">0</td>
+                                                        <input type="hidden" name="dif_cost" value="0">
                                                     @endif
                                                 </tr>
                                                 <tr>
@@ -174,18 +185,19 @@
                             <div class="row">
                                 <div class="col-12 text-end">
                                     <button type="submit" class="btn btn-primary mb-3 btn-custom border-0"
-                                        id="downloadInvoiceBtn" onclick="downloadInvoice()"><i
-                                            class="fa-solid fa-thumbs-up"></i>&nbsp;Xác nhận và tải hoá đơn</button>
+                                        id="downloadInvoiceBtn" onclick="downloadInvoice(event)"><i
+                                            class="fa-solid fa-thumbs-up"></i>
+                                            &nbsp;Xác nhận và tải hoá đơn
+                                    </button>
                                 </div>
                             </div>
                         </form>
 
-                        
                         <a id="downloadLink" style="display:none"></a>
-
                         <script>
                             function downloadInvoice(event) {
-                                event.preventDefault();
+                                event.preventDefault(); 
+
                                 var downloadButton = document.getElementById('downloadInvoiceBtn');
                                 var qrCodeValue = document.getElementById('code-image-qrcode').innerText;
 
@@ -195,29 +207,24 @@
                                     scrollX: 0,
                                     scrollY: -window.scrollY,
                                     useCORS: true,
-                                    width: document.getElementById('convert-image-invoice').offsetWidth,
-                                    height: document.getElementById('convert-image-invoice').offsetHeight,
-                                    x: 0,
-                                    y: 0,
-                                    allowTaint: true,
                                     backgroundColor: "#ffffff"
                                 }).then(function(canvas) {
-                                    var imgData = canvas.toDataURL('image/png');
-                                    var downloadLink = document.createElement('a');
-                                    downloadLink.href = imgData;
-                                    downloadLink.download = qrCodeValue + '.png';
-                                    downloadLink.click(); 
+                                    var imageData = canvas.toDataURL("image/png");
+                                    var link = document.getElementById('downloadLink');
+                                    link.href = imageData;
+                                    link.download = "invoice.png";
+                                    link.style.display = "block";
+                                    link.click();
 
-                                    downloadButton.style.display = 'inline-block';
+                                    document.getElementById("convert-image-invoice").submit();
                                 });
-                            };
-                            document.getElementById('downloadInvoiceBtn').addEventListener('click', downloadInvoice);
+                            }
+
                         </script>
                     </div>
                 </div>
             </div>
         </section>
-
     </main>
 
     <footer id="footer" class="footer mt-0">
@@ -229,7 +236,6 @@
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
-
     @include('cnd-js')
 
 </body>

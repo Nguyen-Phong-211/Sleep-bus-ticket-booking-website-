@@ -206,13 +206,8 @@
             <p class="fs-5 fw-bold" id="total-price{{ $route->route_id }}" data-price="{{ $route->price }}">Tổng
                 tiền: {{ number_format($route->price) }} đồng</p>
 
-            <form id="ticket-form" method="post" data-route-id="{{ $route->route_id }}" 
-                action="{{ route('orderticket.index', 
-                ['route' => $route->route_id, 
-                'routename' => $route->departurepoint_name . $route->arrivalpoint_name,
-                'vehiclename' => $route->type_vehicle_name ]) }}">
-                @csrf
-                @method('post')
+            <form id="ticket-form" method="get" data-route-id="{{ $route->route_id }}" 
+                action="{{ route('orderticket.index') }}">
 
                 <input type="hidden" name="route" value="{{ $route->route_id }}">
                 <input type="hidden" id="selected-seats-count{{ $route->route_id }}" name="ticket"
@@ -223,7 +218,6 @@
                     value="">
                 <input type="hidden" id="select-type-vehicle" name="type_vehicle_id"
                     value="{{ $route->type_vehicle_id }}">
-                <input type="hidden" id="selected-route" name="route" value="{{ $route->route_id }}">
 
                 <input type="hidden" id="selected-route-name" name="route_name"
                     value="{{ $route->departurepoint_name . $route->arrivalpoint_name }}">

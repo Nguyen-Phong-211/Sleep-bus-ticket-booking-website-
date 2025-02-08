@@ -44,114 +44,70 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Mã phương tiện</th>
-                                        <th>Tên phương tiện</th>
-                                        <th>Biển số xe</th>
+                                        <th>Mã loại phương tiện</th>
+                                        <th>Tên loại phương tiện</th>
                                         <th>Max ghế ngồi</th>
-                                        <th>Salary</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>STT</th>
+                                        <th>Mã loại phương tiện</th>
+                                        <th>Tên loại phương tiện</th>
+                                        <th>Max ghế ngồi</th>
                                         <th></th>
                                     </tr>
                                     <tr>
                                         <td>
                                             <select name="" id="" class="form-select custom-form">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
+                                                @foreach ($getTypeVehicle as $index => $typeVehicle)
+                                                    <option value="{{ $loop->iteration }}">{{ $loop->iteration }}</option>
+                                                @endforeach
                                             </select>
                                         </td>
                                         <td>
                                             <select name="" id="" class="form-select custom-form">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
+                                                @foreach ($getTypeVehicle as $index => $typeVehicle)
+                                                    <option value="{{ $typeVehicle->type_vehicle_id }}">{{ $typeVehicle->type_vehicle_id }}</option>
+                                                @endforeach
                                             </select>
                                         </td>
                                         <td>
                                             <select name="" id="" class="form-select custom-form">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
+                                                <option value="" selected>All</option>
+                                                @foreach ($getTypeVehicle as $index => $typeVehicle)
+                                                    <option value="{{ $typeVehicle->type_vehicle_name }}">{{ $typeVehicle->type_vehicle_name }}</option>
+                                                @endforeach
                                             </select>
                                         </td>
                                         <td>
                                             <select name="" id="" class="form-select custom-form">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
+                                                <option value="" selected>All</option>
+                                                @foreach ($getTypeVehicle as $index => $typeVehicle)
+                                                    <option value="{{ $typeVehicle->max_seat }}">{{ $typeVehicle->max_seat }}</option>
+                                                @endforeach
                                             </select>
                                         </td>
-                                        <td>
-                                            <select name="" id="" class="form-select custom-form">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name="" id="" class="form-select custom-form">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name="" id="" class="form-select custom-form">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                            </select>
-                                        </td>
+                                        <td></td>
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
-                                        <td>
-                                            <a href=""><i class="bi bi-pencil-square"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Garrett Winters</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>63</td>
-                                        <td>2011/07/25</td>
-                                        <td>$170,750</td>
-                                        <td>
-                                            <a href=""><i class="bi bi-pencil-square"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
-                                        <td>
-                                            <a href=""><i class="bi bi-pencil-square"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Garrett Winters</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>63</td>
-                                        <td>2011/07/25</td>
-                                        <td>$170,750</td>
-                                        <td>
-                                            <a href=""><i class="bi bi-pencil-square"></i></a>
-                                        </td>
-                                    </tr>
+                                    @foreach ($getTypeVehicle as $index => $typeVehicle)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td> 
+                                            <td>{{ $typeVehicle->type_vehicle_id }}</td>
+                                            <td>{{ $typeVehicle->type_vehicle_name }}</td>
+                                            <td>{{ $typeVehicle->max_seat }}</td>
+                                            <td>
+                                                <a href="{{ route('admin.typevehicle.update', ['id' => $typeVehicle->type_vehicle_id, 'tid' => Str::uuid7()]) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#typeVehicle{{ $typeVehicle->type_vehicle_id }}"><i class="bi bi-pencil-square"></i></a>
+                                                @include('admin.typevehicle.form-update')
+
+                                                <a href="{{ route('admin.typevehicle.insert', ['tid' => Str::uuid7()]) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertTypeVehicle{{ $typeVehicle->type_vehicle_id }}"><i class="bi bi-plus-square"></i></a>
+                                                @include('admin.typevehicle.form-insert')
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

@@ -40,6 +40,7 @@
                     @endforeach
                 </select>
             </div>
+            
             <div class="mb-3">
                 <label for="sit-type" class="form-label">Hàng ghế</label>
                 <select id="sit-type" name="sit_type" class="form-select">
@@ -52,6 +53,7 @@
                     @endforeach
                 </select>
             </div>
+
             <div class="mb-3">
                 <label for="floor-type" class="form-label">Tầng</label>
                 <select id="floor-type" name="floor_type" class="form-select">
@@ -64,6 +66,7 @@
                     @endforeach
                 </select>
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Giờ khởi hành</label>
                 @foreach ($typeTimes as $typeTime)

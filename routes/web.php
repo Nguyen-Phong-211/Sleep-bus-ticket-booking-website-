@@ -109,8 +109,8 @@ Route::prefix('setting')->middleware(['auth'])->group(function () {
 
 //order-ticket
 Route::prefix('reservation/orderticket')->middleware(['auth'])->group(function () {
-    Route::post('/', [OrderTicketController::class, 'index'])->name('orderticket.index');
-    Route::post('/confirm', [OrderTicketController::class, 'confirmOrderTicket'])->name('orderticket.confirm');
+    Route::get('/', [OrderTicketController::class, 'index'])->name('orderticket.index');
+    Route::post('/confirm/transaction_id={transaction_id}&redirect={redirect}', [OrderTicketController::class, 'confirmOrderTicket'])->name('orderticket.confirm');
     Route::post('/storage', [OrderTicketController::class, 'storage'])->name('orderticket.storage');
 });
 
@@ -150,4 +150,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 // TypeVehicle
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/typevehicle', [ManagementTypeVehicleController::class, 'index'])->name('admin.typevehicle');
+    Route::post('/typevehicle/update/{id}/{tid}', [ManagementTypeVehicleController::class, 'update'])->name('admin.typevehicle.update');
+    Route::post('/typevehicle/insert/{tid}', [ManagementTypeVehicleController::class, 'insert'])->name('admin.typevehicle.insert');
 });

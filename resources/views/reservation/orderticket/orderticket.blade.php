@@ -42,9 +42,7 @@
                         </div>
 
                         @include('reservation.orderticket.seat-order')
-
                         <script src="{{ asset('assets/js/orderticket.js') }}"></script>
-
                     </div>
                 </div>
 
@@ -66,11 +64,17 @@
                             class="bi bi-currency-exchange"></i></h4>
                     <div class="text-start col-12">
 
-                        <form action="{{ route('orderticket.confirm', ['redirect' => 'invoice']) }}" method="post">
+                        @php
+                            $transactionId = Str::uuid7();
+                            $redirect = Str::uuid7();
+                        @endphp
+                        <form action="{{ route('orderticket.confirm', ['redirect' => $redirect, 'transaction_id' => $transactionId]) }}" method="post">
+
                             @csrf
                             <table class="table table-borderless">
                                 <tr>
                                     <td>Tuyến xe</td>
+                                    <input type="hidden" name="route" value="{{ $route }}">
                                     <td class="fw-bold fs-5">
                                         @foreach ($info_departures as $info_departure)
                                             {{ $info_departure->departurepoint_name }} - 
@@ -99,6 +103,32 @@
                                     <td>Số lượng ghế</td>
                                     <td id="seatNames">{{ $seat_name }}</td>
                                     <input type="hidden" name="seatName" value="{{ $seat_name }}">
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            let selectedSeats = []; // Mảng lưu trữ các ghế đã chọn
+                                    
+                                            document.querySelectorAll(".checkbox-select-seat").forEach(function (checkbox) {
+                                                checkbox.addEventListener("change", function () {
+                                                    let seatName = this.dataset.seatNumber; // Lấy tên ghế từ data attribute
+                                                    if (this.checked) {
+                                                        if (!selectedSeats.includes(seatName)) {
+                                                            selectedSeats.push(seatName);
+                                                        }
+                                                    } else {
+                                                        selectedSeats = selectedSeats.filter(seat => seat !== seatName);
+                                                    }
+                                                    updateSeatDisplay();
+                                                });
+                                            });
+                                    
+                                            function updateSeatDisplay() {
+                                                document.getElementById("seatNames").textContent = selectedSeats.join(", ");
+                                                document.querySelector("input[name='seatName']").value = selectedSeats.join(", ");
+                                            }
+                                        });
+                                    </script>
+                                    
                                 </tr>
                                 <tr>
                                     <td>Điểm trả khách</td>
@@ -123,21 +153,25 @@
                                 <tr>
                                     <td>Hình thức di chuyển</td>
                                     <td id="travelMode">Một chiều</td>
-                                    <input type="hidden" name="travelMode" value="">
+                                    <input type="hidden" name="travelMode" value="" id="travelModeInput">
 
                                     <script>
                                         const travelModeElement = document.getElementById('travelMode');
-                                    
-                                        const observer = new MutationObserver((mutations) => {
-                                            mutations.forEach((mutation) => {
-                                                if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                                                    const newValue = travelModeElement.textContent.trim();
-                                                    document.querySelector('input[name="travelMode"]').value = newValue;
-                                                }
+                                        const travelModeInput = document.getElementById('travelModeInput');
+                                
+                                        if (travelModeElement && travelModeInput) {
+                                            const observer = new MutationObserver((mutations) => {
+                                                mutations.forEach((mutation) => {
+                                                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
+
+                                                        const newValue = travelModeElement.textContent.trim();
+                                                        travelModeInput.value = newValue;
+                                                    }
+                                                });
                                             });
-                                        });
-                                    
-                                        observer.observe(travelModeElement, { childList: true, subtree: true, characterData: true });
+                                
+                                            observer.observe(travelModeElement, { childList: true, subtree: true, characterData: true });
+                                        }
                                     </script>
                                 </tr>
                                 <tr>

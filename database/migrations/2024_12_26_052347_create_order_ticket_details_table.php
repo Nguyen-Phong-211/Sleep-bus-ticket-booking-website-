@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('order_ticket_details', function (Blueprint $table) {
             $table->id('order_ticket_detail_id');
+            $table->string('order_ticket_detail_')->index();
             $table->unsignedBigInteger('route_schedule_id')->index();
             $table->unsignedBigInteger('seat_id')->index();
             $table->unsignedBigInteger('order_ticket_id')->index();

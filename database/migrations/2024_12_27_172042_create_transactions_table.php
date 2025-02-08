@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id('transaction_id')->primary();
+            $table->string('transaction_')->index();
             $table->unsignedBigInteger('type_transaction_id')->index();
             $table->timestamp('transaction_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->smallInteger('status');

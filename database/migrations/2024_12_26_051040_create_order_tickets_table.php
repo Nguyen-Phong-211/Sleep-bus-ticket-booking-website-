@@ -27,6 +27,7 @@ return new class extends Migration
             $table->smallInteger('one_way');
             $table->smallInteger('round_trip');
             $table->smallInteger('transshipment');
+            $table->string('image_invoice');
 
             $table->foreign('route_id')->references('route_id')->on('routes')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
