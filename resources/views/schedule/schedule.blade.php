@@ -116,7 +116,7 @@
                                                     <td class="align-middle">{{ $route->total_time }} giờ</td>
                                                     <td class="align-middle">{{ number_format($route->price) }} VNĐ</td>
                                                     <td class="align-middle">
-                                                        <a href="{{ route('reservation.index', ['route_schedule' => $route->route_id]) }}"
+                                                        <a href="{{ route('reservation.index', ['route_schedule' => $route->route_id, 'route_name' => $route->departurepoint_name .'-'. $route->arrivalpoint_name]) }}"
                                                             class="border-0 badge rounded-pill bg-primary p-3 text-white">
                                                             <i class="fa-solid fa-magnifying-glass"></i>&nbsp;
                                                             Tìm chuyến xe

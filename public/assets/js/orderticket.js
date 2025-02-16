@@ -95,4 +95,3 @@ document.addEventListener('DOMContentLoaded', function () {
         form.querySelector('input[name="finalTotal"]').value = finalTotal;
     });
 });
-

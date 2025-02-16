@@ -16,6 +16,7 @@
                                             <input class="form-check-input checkbox-select-seat" type="checkbox" disabled
                                                 data-seat-number="{{ $seat->seat_name }}"
                                                 data-seatId="{{ $seat->seat_id }}"
+                                                data-price="{{ $seat->price }}"
                                                 value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Click để chọn ghế ngồi">
                                         </div>
@@ -71,6 +72,7 @@
                                                     <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                     data-seat-number="{{ $seat->seat_name }}"
                                                     data-seatId="{{ $seat->seat_id }}"
+                                                    data-price="{{ $seat->price }}"
                                                     value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                     data-bs-placement="top" title="Click để chọn ghế ngồi">
 
@@ -123,6 +125,7 @@
                                                     <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                     data-seat-number="{{ $seat->seat_name }}"
                                                     data-seatId="{{ $seat->seat_id }}"
+                                                    data-price="{{ $seat->price }}"
                                                     value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                     data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                 </div>
@@ -190,12 +193,14 @@
                                                 <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                     checked data-seat-number="{{ $seat->seat_name }}"
                                                     data-seatId="{{ $seat->seat_id }}"
+                                                    data-price="{{ $seat->price }}"
                                                     value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                     data-bs-placement="top" title="Click để chọn ghế ngồi">
                                             @else
                                                 <input class="form-check-input checkbox-select-seat" type="checkbox" disabled
                                                     data-seat-number="{{ $seat->seat_name }}"
                                                     data-seatId="{{ $seat->seat_id }}"
+                                                    data-price="{{ $seat->price }}"
                                                     value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                     data-bs-placement="top" title="Click để chọn ghế ngồi">
                                             @endif
@@ -257,12 +262,14 @@
                                                         <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                             checked data-seat-number="{{ $seat->seat_name }}"
                                                             data-seatId="{{ $seat->seat_id }}"
+                                                            data-price="{{ $seat->price }}"
                                                             value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                     @else
                                                         <input class="form-check-input checkbox-select-seat" type="checkbox" disabled
                                                             data-seat-number="{{ $seat->seat_name }}"
                                                             data-seatId="{{ $seat->seat_id }}"
+                                                            data-price="{{ $seat->price }}"
                                                             value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                     @endif
@@ -321,12 +328,14 @@
                                                         <input class="form-check-input checkbox-select-seat" type="checkbox"
                                                             checked data-seat-number="{{ $seat->seat_name }}"
                                                             data-seatId="{{ $seat->seat_id }}"
+                                                            data-price="{{ $seat->price }}"
                                                             value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                     @else
                                                         <input class="form-check-input checkbox-select-seat" type="checkbox" disabled
                                                             data-seat-number="{{ $seat->seat_name }}"
                                                             data-seatId="{{ $seat->seat_id }}"
+                                                            data-price="{{ $seat->price }}"
                                                             value="{{ $seat->seat_name }}" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" title="Click để chọn ghế ngồi">
                                                     @endif

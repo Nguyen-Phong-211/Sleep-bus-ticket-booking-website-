@@ -9,6 +9,7 @@
     <meta name="keywords" content="">
 
     @include('cnd-css')
+    <script src="{{ asset('assets/js/form-booking.js') }}"></script>
 </head>
 
 <body class="index-page">
@@ -68,9 +69,10 @@
                             $transactionId = Str::uuid7();
                             $redirect = Str::uuid7();
                         @endphp
-                        <form action="{{ route('orderticket.confirm', ['redirect' => $redirect, 'transaction_id' => $transactionId]) }}" method="post">
+                        <form action="{{ route('orderticket.confirm', ['redirect' => $redirect, 'transaction_id' => $transactionId]) }}" method="post" id="bookingForm">
 
                             @csrf
+                            @method('POST')
                             <table class="table table-borderless">
                                 <tr>
                                     <td>Tuyến xe</td>
@@ -103,128 +105,36 @@
                                     <td>Số lượng ghế</td>
                                     <td id="seatNames">{{ $seat_name }}</td>
                                     <input type="hidden" name="seatName" value="{{ $seat_name }}">
-
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", function () {
-                                            let selectedSeats = []; // Mảng lưu trữ các ghế đã chọn
-                                    
-                                            document.querySelectorAll(".checkbox-select-seat").forEach(function (checkbox) {
-                                                checkbox.addEventListener("change", function () {
-                                                    let seatName = this.dataset.seatNumber; // Lấy tên ghế từ data attribute
-                                                    if (this.checked) {
-                                                        if (!selectedSeats.includes(seatName)) {
-                                                            selectedSeats.push(seatName);
-                                                        }
-                                                    } else {
-                                                        selectedSeats = selectedSeats.filter(seat => seat !== seatName);
-                                                    }
-                                                    updateSeatDisplay();
-                                                });
-                                            });
-                                    
-                                            function updateSeatDisplay() {
-                                                document.getElementById("seatNames").textContent = selectedSeats.join(", ");
-                                                document.querySelector("input[name='seatName']").value = selectedSeats.join(", ");
-                                            }
-                                        });
-                                    </script>
-                                    
                                 </tr>
                                 <tr>
                                     <td>Điểm trả khách</td>
                                     <td id="arrivalPoint"></td>
                                     <input type="hidden" name="arrivalPoint" value="">
-
-                                    <script>
-                                        const arrivalPointElement = document.getElementById('arrivalPoint');
-                                    
-                                        const observer = new MutationObserver((mutations) => {
-                                            mutations.forEach((mutation) => {
-                                                if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                                                    const newValue = arrivalPointElement.textContent.trim();
-                                                    document.querySelector('input[name="arrivalPoint"]').value = newValue;
-                                                }
-                                            });
-                                        });
-                                    
-                                        observer.observe(arrivalPointElement, { childList: true, subtree: true, characterData: true });
-                                    </script>
                                 </tr>
                                 <tr>
                                     <td>Hình thức di chuyển</td>
                                     <td id="travelMode">Một chiều</td>
                                     <input type="hidden" name="travelMode" value="" id="travelModeInput">
-
-                                    <script>
-                                        const travelModeElement = document.getElementById('travelMode');
-                                        const travelModeInput = document.getElementById('travelModeInput');
-                                
-                                        if (travelModeElement && travelModeInput) {
-                                            const observer = new MutationObserver((mutations) => {
-                                                mutations.forEach((mutation) => {
-                                                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
-
-                                                        const newValue = travelModeElement.textContent.trim();
-                                                        travelModeInput.value = newValue;
-                                                    }
-                                                });
-                                            });
-                                
-                                            observer.observe(travelModeElement, { childList: true, subtree: true, characterData: true });
-                                        }
-                                    </script>
                                 </tr>
+                                
                                 <tr>
                                     <td>Giá</td>
                                     <td id="totalPrice">{{ number_format($total_price) }} đồng</td>
-                                    <input type="hidden" name="totalPrice" value="{{ $total_price }}">
+                                    <input type="hidden" name="totalPrice" id="totalPriceInput" value="{{ $total_price }}">
                                 </tr>
+                                
                                 <tr>
                                     <td>Phí trung chuyển</td>
                                     <td id="otherFees">0 đồng</td>
-                                    <input type="hidden" name="otherFees" value="" id="otherFeesInput">
-                                    <script>
-                                        const otherFeesElement = document.getElementById('otherFees');
-                                        const otherFeesInput = document.getElementById('otherFeesInput');
-                                
-                                        if (otherFeesElement && otherFeesInput) {
-                                            const observer = new MutationObserver((mutations) => {
-                                                mutations.forEach((mutation) => {
-                                                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
-
-                                                        const newValue = otherFeesElement.textContent.trim();
-                                                        otherFeesInput.value = newValue;
-                                                    }
-                                                });
-                                            });
-                                
-                                            observer.observe(otherFeesElement, { childList: true, subtree: true, characterData: true });
-                                        }
-                                    </script>
+                                    <input type="hidden" name="otherFees" id="otherFeesInput" value="0">
                                 </tr>
+                                
                                 <tr class="fs-5 fw-bold">
                                     <td>Tổng tiền thanh toán</td>
                                     <td id="finalTotal">{{ number_format($total_price) }} đồng</td>
-                                    <input type="hidden" name="finalTotal" id="finalTotalInput" value="">
-                                    <script>
-                                        const finalTotalElement = document.getElementById('finalTotal');
-                                        const finalTotalInput = document.getElementById('finalTotalInput');
-                                
-                                        if (finalTotalElement && finalTotalInput) {
-                                            const observer = new MutationObserver((mutations) => {
-                                                mutations.forEach((mutation) => {
-                                                    if (mutation.type === 'childList' || mutation.type === 'characterData') {
-
-                                                        const newValue = finalTotalElement.textContent.trim();
-                                                        finalTotalInput.value = newValue;
-                                                    }
-                                                });
-                                            });
-                                
-                                            observer.observe(finalTotalElement, { childList: true, subtree: true, characterData: true });
-                                        }
-                                    </script>
+                                    <input type="hidden" name="finalTotal" id="finalTotalInput" value="{{ $total_price }}">
                                 </tr>
+                                
                             </table>
 
                             <div class="text-end">
@@ -234,32 +144,6 @@
                                 </button>
                             </div>
                         </form>
-                        <script>
-                            $(document).ready(function() {
-                                const transshipmentFee = 50000;
-
-                                function updateTotalPrice() {
-                                    let totalPrice = parseInt("{{ $total_price }}");
-                                    let otherFees = 0;
-
-                                    if ($('#trung-chuyen-2').prop('checked')) {
-                                        otherFees = transshipmentFee;
-                                    } else {
-                                        otherFees = 0;
-                                    }
-
-                                    $('#otherFees').text(otherFees.toLocaleString() + ' đồng');
-                                    let finalTotal = totalPrice + otherFees;
-                                    $('#finalTotal').text(finalTotal.toLocaleString() + ' đồng');
-                                }
-
-                                $('input[name="diem-tra"]').on('change', function() {
-                                    updateTotalPrice();
-                                });
-
-                                updateTotalPrice();
-                            });
-                        </script>
                     </div>
                 </div>
             </div>

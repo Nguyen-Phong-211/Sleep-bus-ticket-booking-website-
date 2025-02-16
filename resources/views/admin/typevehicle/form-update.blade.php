@@ -13,11 +13,11 @@
                         <p class=""><strong>Mã thao tác</strong>: {{ Str::uuid7() }}</p>
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label fw-bold">Tên loại phương tiện:</label>
+                        <label class="form-label fw-bold">Tên loại phương tiện:</label>
                         <input type="text" class="form-control" name="nameTypeVehicle" placeholder="Tên loại phương tiện" value="{{ $typeVehicle->type_vehicle_name }}">
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label fw-bold">Max chỗ ngồi:</label>
+                        <label class="form-label fw-bold">Max chỗ ngồi:</label>
                         <input type="text" class="form-control" name="maxSeat" placeholder="Tên loại phương tiện" value="{{ $typeVehicle->max_seat }}">
                     </div>
                 </div>

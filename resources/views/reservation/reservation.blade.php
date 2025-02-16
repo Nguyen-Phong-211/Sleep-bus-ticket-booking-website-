@@ -48,7 +48,7 @@
                                             <div class="col-md-12">
                                                 <div class="container text-center no-result-container">
                                                     <img src="{{ asset('assets/img/general/no-result.png') }}"
-                                                        alt="No Result" class="no-result-image img-fluid">
+                                                        alt="No Result" class="no-result-image img-fluid w-25">
                                                     <h1 class="display-4">Không có kết quả</h1>
                                                     <p class="lead">Xin lỗi, không tìm thấy thông tin bạn cần.</p>
                                                     <a href="{{ route('home.index') }}"
@@ -193,15 +193,15 @@
                                                     @else
                                                         <hr>
                                                         <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-                                                            {{-- <a href="{{ route('orderticket.index', ['route' => $route->route_id, 'type_vehicle_id' => $route->type_vehicle_id, 'route_' => (string) Str::uuid7()]) }}"
+                                                            <a href="{{ route('orderticket.index', ['route' => $route->route_id, 'type_vehicle_id' => $route->type_vehicle_id, 'route_' => (string) Str::uuid7()]) }}"
                                                                 class="btn btn-primary w-auto border-0 text-uppercase rounded-5 p-3">
                                                                 <i class="bi bi-bookmark-check"></i>&nbsp; Chọn tuyến
-                                                            </a> --}}
+                                                            </a>
 
                                                             <ul class="nav nav-pills mb-0 ms-4" id="pills-tab"
                                                                 role="tablist">
                                                                 <li class="nav-item active" role="presentation">
-                                                                    <button class="nav-link btn-reservation" id="pills-home-tab"
+                                                                    <button class="nav-link" id="pills-home-tab"
                                                                         data-bs-toggle="pill"
                                                                         data-bs-target="#pills-home{{ $route->route_id }}"
                                                                         type="button" role="tab"

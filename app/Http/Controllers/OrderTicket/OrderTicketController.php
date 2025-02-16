@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Mail\InfoInvoiceMail;
+use Illuminate\Support\Facades\Mail;
 
 
 class OrderTicketController extends Controller
@@ -21,14 +23,18 @@ class OrderTicketController extends Controller
         $total_price = $request->input('total_price');
         $routeId = $request->input('route');
 
+        $infoRoute = DB::table('routes')->where('route_id', '=', $route)->first();
+
         $displaySeats = DB::table('seats as s')
             ->join('type_vehicles as tv', 'tv.type_vehicle_id', '=', 's.type_vehicle_id')
             ->join('floors as f', 'f.floor_id', '=', 's.floor_id')
+            ->join('routes as r', 'r.type_vehicle_id', '=', 'tv.type_vehicle_id')
             ->select(
                 's.*',
                 'tv.type_vehicle_name',
                 'tv.max_seat',
-                'f.floor_name'
+                'f.floor_name',
+                'r.price'
             )
             ->whereIn('s.type_vehicle_id', [1, 2, 3])
             ->get();
@@ -63,7 +69,6 @@ class OrderTicketController extends Controller
             return str_replace(' ', '+', $string);
         }
 
-
         return view(
             'reservation/orderticket.orderticket',
             compact(
@@ -75,6 +80,7 @@ class OrderTicketController extends Controller
                 'branches',
                 'info_departures',
                 'info_arrivalpoints',
+                'infoRoute'
             )
         );
     }
@@ -245,13 +251,25 @@ class OrderTicketController extends Controller
 
             DB::commit();
 
-            session()->flash('order_ticket_success', true);
-            sleep(2);
+            // **Send Email with Invoice**
+            $user = Auth::user();
+            Mail::to($user->email)->send(new InfoInvoiceMail($image_invoice));
 
-            return view('reservation.orderticket.success');
+            session()->flash('order_ticket_success', true);
+
+            return response()->json([
+                'success' => true,
+                'redirect' => route('orderticket.success')
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
+    }
+
+    // 
+    public function success()
+    {
+        return view('inform.success');
     }
 }

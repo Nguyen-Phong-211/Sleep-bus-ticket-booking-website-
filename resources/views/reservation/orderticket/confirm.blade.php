@@ -9,6 +9,7 @@
     <meta name="keywords" content="">
 
     @include('cnd-css')
+    <script src="{{ asset('assets/js/confirm.js') }}"></script>
 </head>
 
 <body class="index-page" style="background-color: #f3f9fe">
@@ -153,7 +154,7 @@
                                                         <td>{{ $seat->type_vehicle_name }}</td>
                                                         <td>{{ number_format($seat->price) }}</td>
 
-                                                        @if ((int) $otherFees != 0)
+                                                        @if ((int) $otherFees == 0)
                                                             <td>{{ number_format($seat->price + 50000) }}</td>
                                                         @else
                                                             <td>{{ number_format($seat->price + 0) }}</td>
@@ -172,7 +173,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row" colspan="6" class="text-uppercase text-end">Tổng tiền</th>
-                                                    <td class="text-end fs-5 fw-bold">{{ $finalTotal }}</td>
+                                                    <td class="text-end fs-5 fw-bold">{{ number_format($finalTotal) }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>                                        
@@ -193,34 +194,7 @@
                             </div>
                         </form>
 
-                        <a id="downloadLink" style="display:none"></a>
-                        <script>
-                            function downloadInvoice(event) {
-                                event.preventDefault(); 
-
-                                var downloadButton = document.getElementById('downloadInvoiceBtn');
-                                var qrCodeValue = document.getElementById('code-image-qrcode').innerText;
-
-                                downloadButton.style.display = 'none';
-
-                                html2canvas(document.getElementById('convert-image-invoice'), {
-                                    scrollX: 0,
-                                    scrollY: -window.scrollY,
-                                    useCORS: true,
-                                    backgroundColor: "#ffffff"
-                                }).then(function(canvas) {
-                                    var imageData = canvas.toDataURL("image/png");
-                                    var link = document.getElementById('downloadLink');
-                                    link.href = imageData;
-                                    link.download = "invoice.png";
-                                    link.style.display = "block";
-                                    link.click();
-
-                                    document.getElementById("convert-image-invoice").submit();
-                                });
-                            }
-
-                        </script>
+                        <a id="downloadLink" style="display: none"></a>
                     </div>
                 </div>
             </div>

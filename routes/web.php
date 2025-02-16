@@ -112,6 +112,7 @@ Route::prefix('reservation/orderticket')->middleware(['auth'])->group(function (
     Route::get('/', [OrderTicketController::class, 'index'])->name('orderticket.index');
     Route::post('/confirm/transaction_id={transaction_id}&redirect={redirect}', [OrderTicketController::class, 'confirmOrderTicket'])->name('orderticket.confirm');
     Route::post('/storage', [OrderTicketController::class, 'storage'])->name('orderticket.storage');
+    Route::get('/success', [OrderTicketController::class, 'success'])->name('orderticket.success');
 });
 
 //otp
@@ -129,6 +130,17 @@ use App\Http\Controllers\Admin\Dashbroad\DashbroadController;
 use App\Http\Controllers\Admin\Logout\AdminLogoutController;
 use App\Http\Controllers\Admin\Vehicle\ManagementVehicleController;
 use App\Http\Controllers\Admin\Vehicle\ManagementTypeVehicleController;
+use App\Http\Controllers\Admin\DepartureArrival\DepartureArrivalController;
+use App\Http\Controllers\Admin\Seat\ManagementFloorController;
+use App\Http\Controllers\Admin\Seat\ManagementSeatController;
+use App\Http\Controllers\Admin\Seat\ManagementRowSeatController;
+use App\Http\Controllers\Admin\Route\ManagementRouteController;
+use App\Http\Controllers\Admin\Route\ManagementScheduleController;
+use App\Http\Controllers\Admin\Route\ManagementStopstationController;
+use App\Http\Controllers\Admin\Invoice\ManagementContractController;
+use App\Http\Controllers\Admin\Invoice\ManagementInvoiceController;
+use App\Http\Controllers\Admin\Customer\ManagementCustomerController;
+use App\Http\Controllers\Admin\Contact\ManagementContactController;
 
 
 
@@ -152,4 +164,59 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/typevehicle', [ManagementTypeVehicleController::class, 'index'])->name('admin.typevehicle');
     Route::post('/typevehicle/update/{id}/{tid}', [ManagementTypeVehicleController::class, 'update'])->name('admin.typevehicle.update');
     Route::post('/typevehicle/insert/{tid}', [ManagementTypeVehicleController::class, 'insert'])->name('admin.typevehicle.insert');
+});
+
+// DepartureArrival
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/departurearrival', [DepartureArrivalController::class, 'index'])->name('admin.departurearrival');
+});
+
+// Floor
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/floor', [ManagementFloorController::class, 'index'])->name('admin.seat.floor');
+});
+
+// Seat
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/seat', [ManagementSeatController::class, 'index'])->name('admin.seat.seat');
+});
+
+// RowSeat
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/rowseat', [ManagementRowSeatController::class, 'index'])->name('admin.seat.rowseat');
+});
+
+// Route
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/route', [ManagementRouteController::class, 'index'])->name('admin.route.route');
+});
+
+// Schedule
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/schedule', [ManagementScheduleController::class, 'index'])->name('admin.route.schedule');
+});
+
+// Stopstation
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/stopstation', [ManagementStopstationController::class, 'index'])->name('admin.route.stopstation');
+});
+
+// Contract
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/contract', [ManagementContractController::class, 'index'])->name('admin.invoice.contract');
+});
+
+// Invoice
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/invoice', [ManagementInvoiceController::class, 'index'])->name('admin.invoice.invoice');
+});
+
+// Customer
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/customer', [ManagementCustomerController::class, 'index'])->name('admin.customer.customer');
+});
+
+// Contact
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/contact', [ManagementContactController::class, 'index'])->name('admin.contact.contact');
 });
