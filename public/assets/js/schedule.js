@@ -1,84 +1,75 @@
-// document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
+    function loadRoutes() {
+        var departureId = $('#address-from').val();
+        var arrivalId = $('#address-to').val();
+        var tableBody = $('#route-table-body');
+        var alertMessage = $('#no-results-alert');
 
-//     function initAutocomplete(inputId, resultsId, points) {
-//         const input = document.getElementById(inputId);
-//         const autocompleteResults = document.getElementById(resultsId);
+        tableBody.empty();
+        alertMessage.hide();
 
-//         if (!input || !autocompleteResults) return;
+        if (departureId) {
+            $.ajax({
+                url: '/schedule/findschedule',
+                method: 'GET',
+                data: { departure_id: departureId, arrival_id: arrivalId },
+                success: function(response) {
+                    if (response.length > 0) {
+                        $.each(response, function(index, route) {
+                            tableBody.append(`
+                                <tr>
+                                    <td class="align-middle">${route.departurepoint_name} - ${route.arrivalpoint_name}</td>
+                                    <td class="align-middle">${route.type_vehicle_name}</td>
+                                    <td class="align-middle">${route.total_km} Km</td>
+                                    <td class="align-middle">${route.total_time} giờ</td>
+                                    <td class="align-middle">${new Intl.NumberFormat().format(route.price)} VNĐ</td>
+                                    <td class="align-middle">
+                                        <a href="/reservation?route_schedule=${route.route_id}&route_name=${route.departurepoint_name}-${route.arrivalpoint_name}"
+                                            class="border-0 badge rounded-pill bg-primary p-3 text-white">
+                                            <i class="fa-solid fa-magnifying-glass"></i>&nbsp;Tìm chuyến xe
+                                        </a>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        alertMessage.show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Lỗi khi lấy dữ liệu tuyến xe:", error);
+                }
+            });
+        }
+    }
 
-//         let debounceTimer;
+    // Khi chọn "Điểm đi"
+    $('#address-from').change(function() {
+        var departureId = $(this).val();
+        var arrivalPointsSelect = $('#address-to');
 
-//         function showAllSuggestions() {
-//             autocompleteResults.innerHTML = ''; // Xóa hết các kết quả cũ
-//             const fragment = document.createDocumentFragment(); // Tạo DocumentFragment để tối ưu DOM manipulation
+        arrivalPointsSelect.empty().append('<option value="">Chọn điểm đến</option>');
 
-//             points.forEach(point => {
-//                 const div = document.createElement('div');
-//                 div.classList.add('autocomplete-item');
-//                 div.textContent = point.departurepoint_name || point.arrivalpoint_name; // Sử dụng tên tương ứng
-//                 div.onclick = () => selectSuggestion(point.departurepoint_name || point.arrivalpoint_name); // Chọn đúng gợi ý
-//                 fragment.appendChild(div);
-//             });
+        if (departureId) {
+            var arrivalPoints = $('#address-from option:selected').data('arrivalpoints');
 
-//             autocompleteResults.appendChild(fragment); // Chỉ append một lần vào DOM
-//             autocompleteResults.style.display = 'block'; // Hiển thị dropdown
-//         }
+            if (arrivalPoints && Array.isArray(arrivalPoints)) {
+                $.each(arrivalPoints, function(index, arrivalPoint) {
+                    arrivalPointsSelect.append(
+                        $('<option>', {
+                            value: arrivalPoint.arrivalpoint_id,
+                            text: arrivalPoint.arrivalpoint_name
+                        })
+                    );
+                });
+            }
 
-//         function showFilteredSuggestions(query) {
-//             const filteredSuggestions = points.filter(point =>
-//                 (point.departurepoint_name || point.arrivalpoint_name).toLowerCase().includes(query.toLowerCase()) // Lọc theo tên điểm
-//             );
+            loadRoutes();
+        }
+    });
 
-//             autocompleteResults.innerHTML = ''; // Xóa hết các kết quả cũ
-//             const fragment = document.createDocumentFragment(); // Tạo DocumentFragment để tối ưu DOM manipulation
-
-//             filteredSuggestions.forEach(point => {
-//                 const div = document.createElement('div');
-//                 div.classList.add('autocomplete-item');
-//                 div.textContent = point.departurepoint_name || point.arrivalpoint_name; // Sử dụng tên tương ứng
-//                 div.onclick = () => selectSuggestion(point.departurepoint_name || point.arrivalpoint_name); // Chọn đúng gợi ý
-//                 fragment.appendChild(div);
-//             });
-
-//             autocompleteResults.appendChild(fragment); 
-//             autocompleteResults.style.display = filteredSuggestions.length > 0 ? 'block' : 'none'; 
-//         }
-
-//         function selectSuggestion(suggestion) {
-//             input.value = suggestion; 
-//             autocompleteResults.style.display = 'none'; 
-//         }
-
-//         // Sử dụng Debouncing để tránh việc gọi showFilteredSuggestions quá nhiều lần
-//         input.addEventListener('input', () => {
-//             clearTimeout(debounceTimer);
-//             debounceTimer = setTimeout(() => {
-//                 const query = input.value; 
-//                 showFilteredSuggestions(query); 
-//             }, 300); 
-//         });
-
-//         // Lắng nghe sự kiện click vào input để hiển thị tất cả các gợi ý
-//         input.addEventListener('focus', () => {
-//             showAllSuggestions(); // Hiển thị tất cả gợi ý khi input được focus
-//         });
-
-//         // Lắng nghe sự kiện blur để ẩn dropdown khi người dùng click ra ngoài
-//         input.addEventListener('blur', () => {
-//             setTimeout(() => {
-//                 autocompleteResults.style.display = 'none'; // Ẩn dropdown khi mất focus
-//             }, 150);
-//         });
-
-//         // Lắng nghe sự kiện click ngoài để ẩn dropdown
-//         document.addEventListener('click', (e) => {
-//             if (!autocompleteResults.contains(e.target) && e.target !== input) {
-//                 autocompleteResults.style.display = 'none'; // Ẩn dropdown nếu click ngoài
-//             }
-//         });
-//     }
-
-//     // Khởi tạo autocomplete cho cả hai input
-//     initAutocomplete('address-from', 'autocomplete-results-from', departurePoints);
-//     initAutocomplete('address-to', 'autocomplete-results-to', arrivalPoints);
-// });
+    // Khi chọn "Điểm đến"
+    $('#address-to').change(function() {
+        loadRoutes();
+    });
+});

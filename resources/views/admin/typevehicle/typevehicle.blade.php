@@ -35,9 +35,12 @@
 
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Quản lý danh mục phương tiện</h4>
-                    </div>
+                    <div class="card-header d-flex align-items-center">
+                        <h4 class="card-title mb-0">Quản lý danh mục phương tiện</h4>
+                        <a href="{{ route('admin.typevehicle.insert', ['tid' => Str::uuid7()]) }}" class="btn btn-primary ms-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Thêm danh mục phương tiện">
+                            <i class="bi bi-plus-square"></i>
+                        </a>
+                    </div>                    
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="multi-filter-select" class="display table table-striped table-hover">
@@ -102,9 +105,6 @@
                                             <td>
                                                 <a href="{{ route('admin.typevehicle.update', ['id' => $typeVehicle->type_vehicle_id, 'tid' => Str::uuid7()]) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#typeVehicle{{ $typeVehicle->type_vehicle_id }}"><i class="bi bi-pencil-square"></i></a>
                                                 @include('admin.typevehicle.form-update')
-
-                                                <a href="{{ route('admin.typevehicle.insert', ['tid' => Str::uuid7()]) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertTypeVehicle{{ $typeVehicle->type_vehicle_id }}"><i class="bi bi-plus-square"></i></a>
-                                                @include('admin.typevehicle.form-insert')
                                             </td>
                                         </tr>
                                     @endforeach

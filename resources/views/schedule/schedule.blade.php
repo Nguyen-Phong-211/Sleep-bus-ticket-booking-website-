@@ -9,6 +9,7 @@
     <meta name="keywords" content="">
 
     @include('cnd-css')
+    <script src="{{ asset('assets/js/schedule.js') }}"></script>
 </head>
 
 <body class="index-page">
@@ -73,8 +74,6 @@
                                     </div>
                                 </div>
                             </form>                            
-                            
-                            <script src="{{ asset('assets/js/home.js') }}"></script>
 
                             <div class="col-lg-12 mt-5">
                                 @if ($getRoute->isEmpty())
@@ -127,6 +126,9 @@
                                         </tbody>
                                     </table>
                                 @endif
+                            </div>
+                            <div id="no-results-alert" class="alert alert-danger" role="alert" style="display: none;">
+                                Không có kết quả tìm kiếm!
                             </div>
                         </div>
                     </div>

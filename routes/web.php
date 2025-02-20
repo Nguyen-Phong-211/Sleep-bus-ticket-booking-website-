@@ -46,6 +46,7 @@ Route::prefix('clause')->group(function () {
 //schedule
 Route::prefix('schedule')->group(function () {
     Route::get('/', [ScheduleController::class, 'index'])->name('schedule.index'); 
+    Route::get('/findschedule', [ScheduleController::class, 'getRoutes'])->name('schedule.findschedule');
 });
 
 //consultation
@@ -163,7 +164,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/typevehicle', [ManagementTypeVehicleController::class, 'index'])->name('admin.typevehicle');
     Route::post('/typevehicle/update/{id}/{tid}', [ManagementTypeVehicleController::class, 'update'])->name('admin.typevehicle.update');
-    Route::post('/typevehicle/insert/{tid}', [ManagementTypeVehicleController::class, 'insert'])->name('admin.typevehicle.insert');
+    Route::get('/typevehicle/insert/{tid}', [ManagementTypeVehicleController::class, 'insert'])->name('admin.typevehicle.insert');
 });
 
 // DepartureArrival

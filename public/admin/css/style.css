@@ -1247,3 +1247,10 @@ outline: none;
   font-size: 13px;
   color: #012970;
 }
+
+/* Custom input tags */
+.input-custom {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #ced4da;
+}

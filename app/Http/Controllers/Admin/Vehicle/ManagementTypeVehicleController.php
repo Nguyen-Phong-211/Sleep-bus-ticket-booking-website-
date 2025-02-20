@@ -33,11 +33,21 @@ class ManagementTypeVehicleController extends Controller
 
     // insert
     public function insert(Request $request){
+        return view('admin.typevehicle.insert');
+    }
 
-        $insertTypeVehicle = DB::table('type_vehicles')->insert([
-            'name' => $request->name
-        ]);
+    // storage
+    public function storage(Request $request){
+        DB::beginTransaction();
 
-        return redirect()->back();
+        $insertTypeVehicle = DB::table('type_vehicles')
+            ->insert([
+                'type_vehicle_id' => $request->type_vehicle_id,
+                'type_vehicle_name' => $request->type_vehicle_name,
+                'max_seat' => $request->max_seat,
+            ]);
+
+        DB::commit();
+        return redirect()->route('admin.typevehicle');
     }
 }
