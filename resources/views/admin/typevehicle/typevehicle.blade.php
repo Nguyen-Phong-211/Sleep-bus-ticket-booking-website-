@@ -10,17 +10,41 @@
     <meta content="" name="keywords">
 
     @include('admin.cdn-css')
+    <script src="{{ asset('assets/vendor/bootstrap/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('admin/js/typevehicle.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 1200
+        });
+    </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: "{{ session('error') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
 
     @include('admin.navarbar')
-
 
     @include('admin.sidebar')
 
     <main id="main" class="main">
-
         <div class="pagetitle">
             <h1>Quản lý danh mục phương tiện</h1>
             <nav>
@@ -54,30 +78,32 @@
                                     </tr>
                                 </thead>
                                 <tfoot>
-                                    <tr>
+                                    <tr id="tfoot-table">
                                         <th>STT</th>
                                         <th>Mã loại phương tiện</th>
                                         <th>Tên loại phương tiện</th>
                                         <th>Max ghế ngồi</th>
-                                        <th></th>
+                                        <th>Chế độ hiển thị</th>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <select name="" id="" class="form-select custom-form">
+                                            <select name="" id="filterSTT" class="form-select custom-form">
+                                                <option value="" selected>All</option>
                                                 @foreach ($getTypeVehicle as $index => $typeVehicle)
                                                     <option value="{{ $loop->iteration }}">{{ $loop->iteration }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="" id="" class="form-select custom-form">
+                                            <select name="" id="filterMaLoai" class="form-select custom-form">
+                                                <option value="" selected>All</option>
                                                 @foreach ($getTypeVehicle as $index => $typeVehicle)
                                                     <option value="{{ $typeVehicle->type_vehicle_id }}">{{ $typeVehicle->type_vehicle_id }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="" id="" class="form-select custom-form">
+                                            <select name="" id="filterTenLoai" class="form-select custom-form">
                                                 <option value="" selected>All</option>
                                                 @foreach ($getTypeVehicle as $index => $typeVehicle)
                                                     <option value="{{ $typeVehicle->type_vehicle_name }}">{{ $typeVehicle->type_vehicle_name }}</option>
@@ -85,17 +111,27 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="" id="" class="form-select custom-form">
+                                            <select name="" id="filterMaxGhe" class="form-select custom-form">
                                                 <option value="" selected>All</option>
                                                 @foreach ($getTypeVehicle as $index => $typeVehicle)
                                                     <option value="{{ $typeVehicle->max_seat }}">{{ $typeVehicle->max_seat }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            <select name="" id="" class="form-select input-custom">
+                                                <option value="10">5</option>
+                                                <option value="20">10</option>
+                                                <option value="30">30</option>
+                                                <option value="">All</option>
+                                            </select>
+                                        </td>
                                     </tr>
                                 </tfoot>
                                 <tbody>
+                                    <div id="noDataAlert" class="alert alert-danger mt-3" role="alert" style="display: none;">
+                                        Dữ liệu không tồn tại!
+                                    </div>
                                     @foreach ($getTypeVehicle as $index => $typeVehicle)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td> 
@@ -105,7 +141,7 @@
                                             <td>
                                                 <a href="{{ route('admin.typevehicle.update', ['id' => $typeVehicle->type_vehicle_id, 'tid' => Str::uuid7()]) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#typeVehicle{{ $typeVehicle->type_vehicle_id }}"><i class="bi bi-pencil-square"></i></a>
                                                 @include('admin.typevehicle.form-update')
-                                            </td>
+                                            </td>                                            
                                         </tr>
                                     @endforeach
                                 </tbody>

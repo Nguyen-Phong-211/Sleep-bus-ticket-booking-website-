@@ -165,6 +165,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/typevehicle', [ManagementTypeVehicleController::class, 'index'])->name('admin.typevehicle');
     Route::post('/typevehicle/update/{id}/{tid}', [ManagementTypeVehicleController::class, 'update'])->name('admin.typevehicle.update');
     Route::get('/typevehicle/insert/{tid}', [ManagementTypeVehicleController::class, 'insert'])->name('admin.typevehicle.insert');
+    Route::post('/typevehicle/storage/{tid}', [ManagementTypeVehicleController::class, 'storage'])->name('admin.typevehicle.storage');
 });
 
 // DepartureArrival

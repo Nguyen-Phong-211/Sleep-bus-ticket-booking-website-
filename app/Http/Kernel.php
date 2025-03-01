@@ -14,6 +14,7 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        \App\Http\Middleware\LogQueryMiddleware::class,
     ];
 
     /**

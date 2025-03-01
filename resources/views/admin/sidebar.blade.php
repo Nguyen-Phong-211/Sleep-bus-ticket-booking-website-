@@ -16,9 +16,9 @@
                data-bs-target="#management-vehicle" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-truck"></i><span>Quản lý phương tiện</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="management-vehicle" class="nav-content collapse {{ request()->routeIs('admin.typevehicle', 'admin.vehicle') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+            <ul id="management-vehicle" class="nav-content collapse {{ request()->routeIs('admin.typevehicle', 'admin.vehicle', 'admin.typevehicle.insert') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('admin.typevehicle') }}" class="{{ request()->routeIs('admin.typevehicle') ? 'active' : '' }}">
+                    <a href="{{ route('admin.typevehicle') }}" class="{{ request()->routeIs('admin.typevehicle', 'admin.typevehicle.insert') ? 'active' : '' }}">
                         <i class="bi bi-circle"></i><span>Danh mục phương tiện</span>
                     </a>
                 </li>
